@@ -7,14 +7,108 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 class ContactsExport implements FromCollection
 {
+    protected $filters;
+
+    public function __construct(array $filters)
+    {
+        $this->filters = $filters;
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return Contacts::all();
 
-        // return Contacts::select("id", "name", "email")->get();
+        $contacts = Contacts::query();
+logger('here1');
+        if(isset($filters)){
+            foreach($filters as $key => $filter){
+                if( $key == 'name' && $filter != null ){
+                    $contacts =  $contacts
+                        ->orWhere('first_name', 'LIKE', '%'.$filter.'%')
+                        ->orWhere('last_name', 'LIKE', '%'.$filter.'%');
+                }
+                if( $key == 'title' && $filter != null ){
+                    $contacts =  $contacts->orWhereIn('title', $filter);
+                }
+                if($key == 'seniority' && $filter != null){
+                    $contacts = $contacts->orWhereIn('seniority', $filter);
+                }
+                if($key == 'department' && $filter != null){
+                    $contacts = $contacts->orWhereIn('departments', $filter);
+                }
+                if($key == 'company' && $filter != null){
+                    $contacts = $contacts->orWhereIn('company', $filter);
+                }
+                if($key == 'exclude_company' && $filter != null){
+                    $contacts = $contacts->orWhereNotIn('company', $filter);
+                }
+                if($key == 'company_city' && $filter != null){
+                    $contacts = $contacts->orWhereIn('company_city', $filter);
+                }
+                if($key == 'company_state' && $filter != null){
+                    $contacts = $contacts->orWhereIn('company_state', $filter);
+                }
+                if($key == 'company_country' && $filter != null){
+                    $contacts = $contacts->orWhereIn('company_country', $filter);
+                }
+                if($key == 'city' && $filter != null){
+                    $contacts = $contacts->orWhereIn('city', $filter);
+                }
+                if($key == 'state' && $filter != null){
+                    $contacts = $contacts->orWhereIn('state', $filter);
+                }
+                if($key == 'country' && $filter != null){
+                    $contacts = $contacts->orWhereIn('country', $filter);
+                }
+                $fromEmployees = 0;
+                if($key == 'from_employees' && $filter != null) {
+                    $fromEmployees = $filter;
+                }
+                $toEmployees = 1000000;
+                if($key == 'to_employees' && $filter != null) {
+                    $toEmployees = $filter;
+                }
+                if($key == 'industry' && $filter != null){
+                    $contacts = $contacts->orWhereIn('industry', $filter);
+                }
+                if($key == 'keywords' && $filter != null){
+                    // VALIDATE THIS
+                    $contacts = $contacts->orWhereIn('keywords', $filter);
+                }
+                if($key == 'technologies' && $filter != null){
+                    // VALIDATE THIS
+                    $contacts = $contacts->orWhereIn('technologies', $filter);
+                }
+                $fromRevenue = 0;
+                if($key == 'from_revenue' && $filter != null) {
+                    $fromRevenue = $filter;
+                }
+                $toRevenue = 10000000000;
+                if($key == 'to_revenue' && $filter != null) {
+                    $toRevenue = $filter;
+                }
+                $fromFunding = 0;
+                if($key == 'from_funding' && $filter != null) {
+                    $fromFunding = $filter;
+                }
+                $toFunding = 10000000000;
+                if($key == 'to_funding' && $filter != null) {
+                    $toFunding = $filter;
+                }
+                if($key == 'email_status' && $filter != null){
+                    $contacts = $contacts->orWhereIn('email_status', $filter);
+                }
+            }
+            $contacts = $contacts->orWhereBetween('employees', [$fromEmployees, $toEmployees]);
+            $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
+            $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
+        }
+logger('here2');
+
+        return $contacts->get();
+
     }
 
     /**
@@ -80,5 +174,10 @@ class ContactsExport implements FromCollection
             'apollo_account_id'
         ];
 
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000; // Set your desired chunk size
     }
 }
