@@ -2,7 +2,10 @@
 
 namespace App\Imports;
 
+use DateTime;
+use Carbon\Carbon;
 use App\Models\Contacts;
+use App\Imports\CustomException;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -17,9 +20,12 @@ class ContactsImport implements ToModel, WithChunkReading, ShouldQueue
     */
     public function model(array $row)
     {
+        $date = null;
+        // $date = $this->validateAndReformatDate($row[43]);
+
         return new Contacts([
             'status'                => 1,
-            'first_name'            => $row[0],
+            'first_name'            => $row[0] ?? 'Not Found',
             'last_name'             => $row[1] ?? 'NULL',
             'title'                 => $row[2],
             'company'               => $row[3],
@@ -58,11 +64,11 @@ class ContactsImport implements ToModel, WithChunkReading, ShouldQueue
             'company_phone'         => $row[36],
             'seo_description'       => $row[37],
             'technologies'          => $row[38],
-            'annual_revenue'        => $row[39],
+            'annual_revenue'        => is_int($row[39]) ? $row[39] : null,
             'total_funding'         => $row[40],
             'latest_funding'        => $row[41],
             'latest_funding_amount' => $row[42],
-            'last_raised_at'        => '2024-05-08', // $row[43] ?? $row[43]->format('Y-m-d')
+            'last_raised_at'        => $date,
             'email_sent'            => $row[44],
             'email_open'            => $row[45],
             'email_bounced'         => $row[46],
@@ -72,6 +78,19 @@ class ContactsImport implements ToModel, WithChunkReading, ShouldQueue
             'apollo_contact_id'     => $row[50],
             'apollo_account_id'     => $row[51],
         ]);
+    }
+
+    private function validateAndReformatDate($date)
+    {
+        try {
+            $date = Carbon::parse($date);
+
+            $date = $date->format('Y-m-d');
+            $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date)->format('Y-m-d h:m:i');
+            return $date;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function chunkSize(): int

@@ -302,5 +302,6 @@
             @endguest
 
         @include('layouts/includes.js')
+        @stack('script')
     </body>
 </html>
