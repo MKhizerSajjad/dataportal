@@ -77,9 +77,9 @@
                                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" placeholder="Enter Confirm Password" autocomplete="new-password">
                                 </div>
 
-                                <div class="mt-4 d-grid">
+                                {{-- <div class="mt-4 d-grid">
                                     <button class="btn btn-primary waves-effect waves-light" type="submit">Register</button>
-                                </div>
+                                </div> --}}
 
                                 <div class="mt-4 text-center">
                                     <p class="mb-0">By registering you agree to the Killnet <a href="#" class="text-primary">Terms of Use</a></p>
