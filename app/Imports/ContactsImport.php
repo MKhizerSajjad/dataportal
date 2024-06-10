@@ -69,7 +69,7 @@ class ContactsImport implements ToModel, WithChunkReading, ShouldQueue
             'latest_funding'        => $row[41],
             'latest_funding_amount' => $row[42],
             'last_raised_at'        => $date,
-            'email_sent'            => $row[44],
+            'email_sent'            => $row[44] ?? null,
             'email_open'            => $row[45],
             'email_bounced'         => $row[46],
             'replied'               => $row[47],

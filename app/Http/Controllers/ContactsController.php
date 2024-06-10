@@ -7,8 +7,9 @@ use App\Models\Contacts;
 use Illuminate\Http\Request;
 use App\Exports\ContactsExport;
 use App\Imports\ContactsImport;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\ProcessContactsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 
 class ContactsController extends Controller
@@ -630,9 +631,9 @@ class ContactsController extends Controller
             'latest_funding' => $request->latest_funding,
             'latest_funding_amount' => $request->latest_funding_amount,
             'last_raised_at' => $request->last_raised_at,
-            'email_sent' => $request->email_sent,
-            'email_open' => $request->email_open,
-            'email_bounced' => $request->email_bounced,
+            'email_sent' => $request->email_sent ?? null,
+            'email_open' => $request->email_open ?? null,
+            'email_bounced' => $request->email_bounced ?? null,
             'replied' => $request->replied,
             'demoed' => $request->demoed,
             'number_of_retail_locations' => $request->number_of_retail_locations,
@@ -679,11 +680,18 @@ class ContactsController extends Controller
         if ($file->getClientOriginalExtension() !== 'csv') {
             return back()->withErrors(['file' => 'The uploaded file must be a CSV.']);
         }
+        // // Use the queue method to enable chunk importing
+        // Excel::queueImport(new ContactsImport, $file);
+        // // Excel::import(new ContactsImport, $file);
 
-        // Use the queue method to enable chunk importing
-        Excel::queueImport(new ContactsImport, $file);
-        // Excel::import(new ContactsImport, $file);
+        // Dispatch the job
 
-        return back()->with('success','Contacts imported successfully');
+        $filePath = $request->file('file')->store('uploads'); // Store the file
+
+        dispatch(new ProcessContactsImport($filePath)); // ->delay(3)
+
+        // ProcessContactsImport::dispatch($filePath);
+
+        return back()->with('success','Contacts importing process is in queue now.');
     }
 }

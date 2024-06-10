@@ -23,6 +23,12 @@ class ContactsExport implements FromCollection
         $contacts = Contacts::query();
 logger('here1');
         if(isset($filters)){
+            $fromEmployees = 0;
+            $toEmployees = 1000000;
+            $fromRevenue = 0;
+            $toRevenue = 10000000000;
+            $fromFunding = 0;
+            $toFunding = 10000000000;
             foreach($filters as $key => $filter){
                 if( $key == 'name' && $filter != null ){
                     $contacts =  $contacts
@@ -62,11 +68,9 @@ logger('here1');
                 if($key == 'country' && $filter != null){
                     $contacts = $contacts->orWhereIn('country', $filter);
                 }
-                $fromEmployees = 0;
                 if($key == 'from_employees' && $filter != null) {
                     $fromEmployees = $filter;
                 }
-                $toEmployees = 1000000;
                 if($key == 'to_employees' && $filter != null) {
                     $toEmployees = $filter;
                 }
@@ -81,19 +85,15 @@ logger('here1');
                     // VALIDATE THIS
                     $contacts = $contacts->orWhereIn('technologies', $filter);
                 }
-                $fromRevenue = 0;
                 if($key == 'from_revenue' && $filter != null) {
                     $fromRevenue = $filter;
                 }
-                $toRevenue = 10000000000;
                 if($key == 'to_revenue' && $filter != null) {
                     $toRevenue = $filter;
                 }
-                $fromFunding = 0;
                 if($key == 'from_funding' && $filter != null) {
                     $fromFunding = $filter;
                 }
-                $toFunding = 10000000000;
                 if($key == 'to_funding' && $filter != null) {
                     $toFunding = $filter;
                 }
@@ -107,7 +107,10 @@ logger('here1');
         }
 logger('here2');
 
-        return $contacts->get();
+// dd($contacts->get());
+return $contacts->take(10)->get();
+
+        // return $contacts->get()->first();
 
     }
 
@@ -176,8 +179,8 @@ logger('here2');
 
     }
 
-    public function chunkSize(): int
-    {
-        return 1000; // Set your desired chunk size
-    }
+    // public function chunkSize(): int
+    // {
+    //     return 1000; // Set your desired chunk size
+    // }
 }
