@@ -20,8 +20,9 @@ class ContactsExport implements FromCollection
     public function collection()
     {
 
+        $filters = $this->filters;
+
         $contacts = Contacts::query();
-logger('here1');
         if(isset($filters)){
             $fromEmployees = 0;
             $toEmployees = 1000000;
@@ -105,12 +106,70 @@ logger('here1');
             $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
             $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
         }
-logger('here2');
+        $contacts = $contacts->take(10)->get();
 
-// dd($contacts->get());
-return $contacts->take(10)->get();
 
-        // return $contacts->get()->first();
+        $transformedData = collect([$this->headings()]);
+
+        $transformedData = $transformedData->merge($contacts->map(function ($contact) {
+            return [
+                // $contact->status ?? '',
+                $contact->first_name ?? '',
+                $contact->last_name ?? '',
+                $contact->title ?? '',
+                $contact->company ?? '',
+                $contact->company_name_for_emails ?? '',
+                $contact->email ?? '',
+                $contact->email_status ?? '',
+                $contact->email_confidence ?? '',
+                $contact->seniority ?? '',
+                $contact->departments ?? '',
+                $contact->contact_owner ?? '',
+                $contact->first_phone ?? '',
+                $contact->work_direct_phone ?? '',
+                $contact->home_phone ?? '',
+                $contact->mobile_phone ?? '',
+                $contact->corporate_phone ?? '',
+                $contact->other_phone ?? '',
+                $contact->stage ?? '',
+                $contact->lists ?? '',
+                $contact->last_contacted ?? '',
+                $contact->account_owner ?? '',
+                $contact->employees ?? '',
+                $contact->industry ?? '',
+                $contact->keywords ?? '',
+                $contact->person_linkedin ?? '',
+                $contact->website ?? '',
+                $contact->company_linkedin_url ?? '',
+                $contact->facebook_url ?? '',
+                $contact->twitter_url ?? '',
+                $contact->city ?? '',
+                $contact->state ?? '',
+                $contact->country ?? '',
+                $contact->company_address ?? '',
+                $contact->company_city ?? '',
+                $contact->company_state ?? '',
+                $contact->company_country ?? '',
+                $contact->company_phone ?? '',
+                $contact->seo_description ?? '',
+                $contact->technologies ?? '',
+                $contact->annual_revenue ?? '',
+                $contact->total_funding ?? '',
+                $contact->latest_funding ?? '',
+                $contact->latest_funding_amount ?? '',
+                $contact->last_raised_at ?? '',
+                $contact->email_sent ?? '',
+                $contact->email_open ?? '',
+                $contact->email_bounced ?? '',
+                $contact->replied ?? '',
+                $contact->demoed ?? '',
+                $contact->number_of_retail_locations ?? '',
+                $contact->apollo_contact_id ?? '',
+                $contact->apollo_account_id ?? ''
+            ];
+        }));
+
+        return $transformedData;
 
     }
 

@@ -342,7 +342,7 @@
 <script>
 
     $(document).ready(function(){
-        initDatatable()
+        initDatatable(null, 'companyTab');
 
         name =null;
         title =null;
@@ -355,12 +355,22 @@
         //     initDatatable(name)
         // })
 
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            initActiveTabDatatable(); // Call the function to initialize DataTable on tab change
+        });
+
+        function initActiveTabDatatable() {
+            let activeTabId = getActiveTabId();
+            let filter = null; // You can define your filter here if needed
+            initDatatable(filter, activeTabId);
+        }
+
         $('.input').on('keyup', /*debounce(*/function(e) {
             let value = $(this).val();
             let type  = $(this).attr('input-filter');
             selectedFilters[type] = value;
             console.log(selectedFilters);
-            initDatatable(selectedFilters)
+            initDatatable(selectedFilters, getActiveTabId())
         })/*, 400)*/;
 
         $('.filter').on('select2:select', function(e) {
@@ -368,8 +378,15 @@
             let type  = $(this).attr('data-filter');
             selectedFilters[type] = value;
             console.log(selectedFilters);
-            initDatatable(selectedFilters)
+            initDatatable(selectedFilters, getActiveTabId())
         });
+
+        console.log(getActiveTabId());
+
+        function getActiveTabId() {
+            // Get the ID of the active tab
+            return document.querySelector('.tab-pane.active').id;
+        }
 
         $(document).on('click','#export-data',function(e) {
 
@@ -398,257 +415,122 @@
             });
 
         });
-
-        // $(document).on('keyup', '#name', function(){
-        //     let name = $(this).val()
-        //     console.log('name');
-        //     initDatatable(name)
-        // })
-
-        // $(document).on('change', '#title', function(){
-
-        //     let title = $(this).val()
-        //     console.log(title);
-        //     initDatatable(title)
-        // })
-
-        // $('#seniority').on('select2:select', function(e) {
-        //     let title = $(this).val();
-        //     console.log(title);
-        //     initDatatable(title);
-        // });
-        // $('#seniority').on('select2:select', function (e) {
-        //     var data = e.params.data;
-        //     console.log(data);
-        // });
-
-        // var dropdown = document.getElementById('seniority');
-        // $(document).on('change', '#seniority', function(){
-        //     let seniority = $(this).val()
-        //     initDatatable(seniority)
-        // })
-
-        // $(document).on('keyup', '#department', function(){
-        //     let department = $(this).val()
-        //     initDatatable(department)
-        // })
-
-        // $(document).on('keyup', '#company', function(){
-        //     let company = $(this).val()
-        //     initDatatable(company)
-        // })
-
-        // $(document).on('keyup', '#exclude_company', function(){
-        //     let exclude_company = $(this).val()
-        //     initDatatable(exclude_company)
-        // })
-
-        // $(document).on('keyup', '#city', function(){
-        //     let city = $(this).val()
-        //     initDatatable(city)
-        // })
-
-        // $(document).on('keyup', '#state', function(){
-        //     let state = $(this).val()
-        //     initDatatable(state)
-        // })
-
-        // $(document).on('keyup', '#country', function(){
-        //     let country = $(this).val()
-        //     initDatatable(country)
-        // })
-
-        // $(document).on('keyup', '#company_city', function(){
-        //     let company_city = $(this).val()
-        //     initDatatable(company_city)
-        // })
-
-        // $(document).on('keyup', '#company_state', function(){
-        //     let company_state = $(this).val()
-        //     initDatatable(company_state)
-        // })
-
-        // $(document).on('keyup', '#company_country', function(){
-        //     let company_country = $(this).val()
-        //     console.log(company_country);
-        //     initDatatable(company_country)
-        // })
-
-        // $(document).on('change', '#company_country', function(){
-        //     let company_country = $(this).val()
-        //     console.log(company_country);
-        //     initDatatable(company_country)
-        // })
-
-        // $(document).on('select', '#company_country', function(){
-        //     let company_country = $(this).val()
-        //     console.log(company_country);
-        //     initDatatable(company_country)
-        // })
-
-        // $(document).on('keyup', '#from_employees', function(){
-        //     let from_employees = $(this).val()
-        //     console.log('keyup'+from_employees);
-        //     initDatatable(from_employees)
-        // })
-
-        // $(document).on('keyup', '#to_employees', function(){
-        //     let to_employees = $(this).val()
-        //     console.log(to_employees)
-        //     initDatatable(to_employees)
-        // })
-
-        // $(document).on('keyup', '#industry', function(){
-        //     let industry = $(this).val()
-        //     initDatatable(industry)
-        // })
-
-        // $(document).on('keyup', '#keywords', function(){
-        //     let keywords = $(this).val()
-        //     initDatatable(keywords)
-        // })
-
-        // $(document).on('keyup', '#technologies', function(){
-        //     let technologies = $(this).val()
-        //     initDatatable(technologies)
-        // })
-
-        // $(document).on('keyup', '#from_revenue', function(){
-        //     let from_revenue = $(this).val()
-        //     initDatatable(from_revenue)
-        // })
-
-        // $(document).on('keyup', '#to_revenue', function(){
-        //     let to_revenue = $(this).val()
-        //     initDatatable(to_revenue)
-        // })
-
-        // $(document).on('keyup', '#from_funding', function(){
-        //     let from_funding = $(this).val()
-        //     initDatatable(from_funding)
-        // })
-
-        // $(document).on('keyup', '#to_funding', function(){
-        //     let to_funding = $(this).val()
-        //     initDatatable(to_funding)
-        // })
-
-        // $(document).on('keyup', '#email_status', function(){
-        //     let email_status = $(this).val()
-        //     initDatatable(email_status)
-        // })
     })
 
     function initDatatable(
-        filter=null
-        // name=null,title=null, seniority=[], department=[], company=[], exclude_company=[], city=[], state=[], country=[],
-        // company_city=[], company_state=[], company_country=[], from_employees=null, to_employees=null, industry=[], keywords=[],
-        // technologies=[], from_revenue=null, to_revenue=null, from_funding=null, to_funding=null, email_status=[]
+        filter=null,
+        tabId
     ){
-        $('#comapny-table').DataTable({
-            serverSide: true,
-            processing: true,
-            pageLength: 10,
-            searching: false,
-            order: [[0, "desc"]],
-            ajax: {
-                "url": "{{ route('contacts.data') }}",
-                "type": "POST",
-                "data":{
-                    _token: "{{ csrf_token() }}",
-                    filter:filter,
-                    // name:name,
-                    // title:title,
-                    // seniority:seniority,
-                    // department:department,
-                    // company:company,
-                    // exclude_company:exclude_company,
-                    // city:city,
-                    // state:state,
-                    // country:country,
-                    // company_city:company_city,
-                    // company_state:company_state,
-                    // company_country:company_country,
-                    // from_employees:from_employees,
-                    // to_employees:to_employees,
-                    // industry:industry,
-                    // technologies:technologies,
-                    // from_revenue:from_revenue,
-                    // to_revenue:to_revenue,
-                    // from_funding:from_funding,
-                    // to_funding:to_funding,
-                    // email_status:email_status
-                }
-            },
-            bDestroy: true,
-            columns: [
-                { "data": "sr_no" , "orderable": false},
-                { "data": "company"},
-                { "data": "name"},
-                { "data": "title" },
-                // { "data": "person_email" },
-                // { "data": "person_phone" },
-                { "data": "email" },
-                { "data": "mobile_phone" },
-                { "data": "industry" },
-                { "data": "employees" },
-                { "data": "annual_revenue" },
-                { "data": "address" },
-                { "data": "website" , "orderable": false},
-            ],
-        });
-        $('#person-table').DataTable({
-            serverSide: true,
-            processing: true,
-            searching: false,
-            pageLength: 10,
-            order: [[0, "desc"]],
-            ajax: {
-                "url": "{{ route('contacts.data') }}",
-                "type": "POST",
-                "data":{
-                    _token: "{{ csrf_token() }}",
-                    filter:filter,
-                    // name:name,
-                    // title:title,
-                    // department:department,
-                    // company:company,
-                    // exclude_company:exclude_company,
-                    // city:city,
-                    // state:state,
-                    // country:country,
-                    // company_city:company_city,
-                    // company_state:company_state,
-                    // company_country:company_country,
-                    // from_employees:from_employees,
-                    // to_employees:to_employees,
-                    // industry:industry,
-                    // technologies:technologies,
-                    // from_revenue:from_revenue,
-                    // to_revenue:to_revenue,
-                    // from_funding:from_funding,
-                    // to_funding:to_funding,
-                    // email_status:email_status
-                }
-            },
-            bDestroy: true,
-            columns: [
-                { "data": "sr_no", "orderable": false, className: 'text-center'},
-                { "data": "name"},
-                { "data": "title" },
-                { "data": "company"},
-                // { "data": "person_email" },
-                // { "data": "person_phone" },
-                { "data": "email" },
-                { "data": "mobile_phone" },
-                { "data": "employees" },
-                { "data": "annual_revenue" },
-                { "data": "address" },
-                { "data": "industry" },
-                { "data": "website" , "orderable": false},
-                { "data": "person_linkedin" , "orderable": false},
-            ],
-        });
+        console.log('tab :  ' + tabId);
+        if (tabId === 'companyTab') {
+            $('#comapny-table').DataTable({
+                serverSide: true,
+                processing: true,
+                pageLength: 10,
+                searching: false,
+                order: [[0, "desc"]],
+                ajax: {
+                    "url": "{{ route('contacts.data') }}",
+                    "type": "POST",
+                    "data":{
+                        _token: "{{ csrf_token() }}",
+                        filter:filter,
+                        // name:name,
+                        // title:title,
+                        // seniority:seniority,
+                        // department:department,
+                        // company:company,
+                        // exclude_company:exclude_company,
+                        // city:city,
+                        // state:state,
+                        // country:country,
+                        // company_city:company_city,
+                        // company_state:company_state,
+                        // company_country:company_country,
+                        // from_employees:from_employees,
+                        // to_employees:to_employees,
+                        // industry:industry,
+                        // technologies:technologies,
+                        // from_revenue:from_revenue,
+                        // to_revenue:to_revenue,
+                        // from_funding:from_funding,
+                        // to_funding:to_funding,
+                        // email_status:email_status
+                    }
+                },
+                bDestroy: true,
+                columns: [
+                    { "data": "sr_no" , "orderable": false},
+                    { "data": "company"},
+                    { "data": "name"},
+                    { "data": "title" },
+                    // { "data": "person_email" },
+                    // { "data": "person_phone" },
+                    { "data": "email" },
+                    { "data": "mobile_phone" },
+                    { "data": "industry" },
+                    { "data": "employees" },
+                    { "data": "annual_revenue" },
+                    { "data": "address" },
+                    { "data": "website" , "orderable": false},
+                ],
+            });
+        } else if (tabId === 'personTab') {
+            $('#person-table').DataTable({
+                serverSide: true,
+                processing: true,
+                searching: false,
+                pageLength: 10,
+                order: [[0, "desc"]],
+                ajax: {
+                    "url": "{{ route('contacts.data') }}",
+                    "type": "POST",
+                    "data":{
+                        _token: "{{ csrf_token() }}",
+                        filter:filter,
+                        // name:name,
+                        // title:title,
+                        // department:department,
+                        // company:company,
+                        // exclude_company:exclude_company,
+                        // city:city,
+                        // state:state,
+                        // country:country,
+                        // company_city:company_city,
+                        // company_state:company_state,
+                        // company_country:company_country,
+                        // from_employees:from_employees,
+                        // to_employees:to_employees,
+                        // industry:industry,
+                        // technologies:technologies,
+                        // from_revenue:from_revenue,
+                        // to_revenue:to_revenue,
+                        // from_funding:from_funding,
+                        // to_funding:to_funding,
+                        // email_status:email_status
+                    }
+                },
+                bDestroy: true,
+                columns: [
+                    { "data": "sr_no", "orderable": false, className: 'text-center'},
+                    { "data": "name"},
+                    { "data": "title" },
+                    { "data": "company"},
+                    // { "data": "person_email" },
+                    // { "data": "person_phone" },
+                    { "data": "email" },
+                    { "data": "mobile_phone" },
+                    { "data": "employees" },
+                    { "data": "annual_revenue" },
+                    { "data": "address" },
+                    { "data": "industry" },
+                    { "data": "website" , "orderable": false},
+                    { "data": "person_linkedin" , "orderable": false},
+                ],
+            });
+        } else {
+            console.log("tab not found");
+        }
     }
 </script>
 

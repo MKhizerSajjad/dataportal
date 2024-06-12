@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Jobs\ProcessContactsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ContactsController extends Controller
 {
@@ -661,9 +662,28 @@ class ContactsController extends Controller
     */
     public function export()
     {
-        $filters = request()->filter;
-        return Excel::download(new ContactsExport($filters), 'contacts.csv');
+        // $filters = request()->filter;
+        // return Excel::download(new ContactsExport($filters), 'data.csv');
         // return back()->with('success','Contacts exported successfully');
+
+
+
+$filters = request()->filter;
+$export = Excel::download(new ContactsExport($filters), 'data.csv');
+return $export;
+// // Generate a temporary file path
+// // $tempFilePath = tempnam(sys_get_temp_dir(), 'data');
+// $tempPath = storage_path('app/temp');
+
+// // Make sure the directory exists
+// if (!file_exists($tempPath)) {
+//     mkdir($tempPath, 0755, true);
+// }
+
+// $tempFilePath = Excel::store($export, $tempPath);
+
+// // Now, return the file for download
+// return response()->download($tempFilePath, 'data.csv')->deleteFileAfterSend(true);
     }
 
     /**
