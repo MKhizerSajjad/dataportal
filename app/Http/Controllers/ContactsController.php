@@ -18,106 +18,11 @@ class ContactsController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-
-        // $date = '1/1/2028';
-        // try {
-        //     $carbonDate = Carbon::parse($date);
-        //     dd($carbonDate->isValid());
-        //     if($carbonDate->isValid()){
-        //         $dateee = $carbonDate->format('Y-m-d');
-        //     } else {
-        //         $dateee = 'Invalid date';
-        //     }
-        // } catch (\Exception $e) {
-        //     $dateee = null;
-        // }
-        // dd($dateee);
-
-        $groupOptions = [
-            // 'title' => Contacts::whereNotNull('title')->distinct()->pluck('title'),
-            // 'company' => Contacts::whereNotNull('company')->distinct()->pluck('company'),
-            // 'email_status' => Contacts::whereNotNull('email_status')->distinct()->pluck('email_status'),
-            // 'seniority' => Contacts::whereNotNull('seniority')->distinct()->pluck('seniority'),
-            // 'departments' => Contacts::whereNotNull('departments')->distinct()->pluck('departments'),
-            // 'contact_owner' => Contacts::whereNotNull('contact_owner')->distinct()->pluck('contact_owner'),
-            // 'stage' => Contacts::whereNotNull('stage')->distinct()->pluck('stage'),
-            // 'employees' => Contacts::whereNotNull('employees')->distinct()->pluck('employees'),
-            // 'industry' => Contacts::whereNotNull('industry')->distinct()->pluck('industry'),
-            // 'keywords' => Contacts::whereNotNull('keywords')->distinct()->pluck('keywords'),
-            // 'city' => Contacts::whereNotNull('city')->distinct()->pluck('city'),
-            // 'state' => Contacts::whereNotNull('state')->distinct()->pluck('state'),
-            // 'country' => Contacts::whereNotNull('country')->distinct()->pluck('country'),
-            // 'company_city' => Contacts::whereNotNull('company_city')->distinct()->pluck('company_city'),
-            // 'company_state' => Contacts::whereNotNull('company_state')->distinct()->pluck('company_state'),
-            // 'company_country' => Contacts::whereNotNull('company_country')->distinct()->pluck('company_country'),
-            // 'annual_revenue' => Contacts::whereNotNull('annual_revenue')->distinct()->pluck('annual_revenue'),
-            // 'latest_funding_type' => Contacts::whereNotNull('latest_funding')->distinct()->pluck('latest_funding'),
-            // 'technologies' => Contacts::whereNotNull('technologies')->distinct()->pluck('technologies'),
-        ];
-
-
-        // MIN MAX: employees, annual_revenue
-
         $columns = [
             'titles', 'companies', 'email_status', 'seniority', 'departments', 'contact_owner', 'stage',
             'industry', 'keywords', 'city', 'state', 'country', 'company_city', 'company_state',
             'company_country', 'technologies'
         ];
-        // 'employees',  'annual_revenue', 'latest_funding',
-
-        // // Fetch all required columns with distinct values
-        // $results = Contacts::select($columns)
-        //                    ->where(function ($query) use ($columns) {
-        //                        foreach ($columns as $column) {
-        //                            $query->orWhereNotNull($column);
-        //                        }
-        //                    })
-        //                    ->distinct()
-        //                    ->get();
-
-        // // Process results to extract distinct values for each column
-        // $groupOptions = [];
-        // foreach ($columns as $column) {
-        //     $groupOptions[$column] = $results->pluck($column)->filter()->unique()->values();
-        // }
-
-        // // $technologiesList = [];
-        // // foreach ($groupOptions['technologies'] as $row) {
-        // //     $technologies = explode(', ', $row);
-
-        // //     $technologiesList = array_merge($technologiesList, $technologies);
-        // // }
-        // // $uniqueTechnologies = array_unique($technologiesList);
-        // // $groupOptions['technologies'] = $uniqueTechnologies;
-
-        // $technologiesSet = [];
-        // foreach ($groupOptions['technologies'] as $row) {
-        //     $technologies = explode(', ', $row);
-        //     foreach ($technologies as $technology) {
-        //         $technologiesSet[$technology] = true;
-        //     }
-        // }
-
-        // $uniqueTechnologies = array_keys($technologiesSet);
-        // $groupOptions['technologies'] = $uniqueTechnologies;
-
-        // return $groupOptions;
-        // foreach ($columns as $column) {
-        //     $filePath = "filters/{$column}.json";
-        //     $groupOptions[$column] = json_decode(Storage::get($filePath));
-        // }
-
-        // $columns = [
-        //     'titles', 'companies', 'email_status', 'seniority', 'departments', 'contact_owner', 'stage',
-        //     'industry', 'keywords', 'city', 'state', 'country', 'company_city', 'company_state',
-        //     'company_country', 'technologies'
-        // ];
-
-        // $groupOptions['titles'] = json_decode(Storage::get("filters/titles.json"));
-        // $groupOptions['companies'] = json_decode(Storage::get("filters/companies.json"));
-
-        // return $groupOptions;
-
         return view('contacts.index');
     }
     public function data(Request $request)
@@ -226,112 +131,8 @@ class ContactsController extends Controller
             $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
             $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
 
-            // if(isset($fromEmployees) && isset($toEmployees)) {
-            //     $fromEmployees = $request->from_employees ? $request->from_employees : 0;
-            //     $toEmployees = $request->to_employees ? $request->to_employees : 10000;
-            //     $contacts = $contacts->orWhereBetween('employees', [$fromEmployees, $toEmployees]);
-            // }
-
-            // if(isset($request->from_revenue) || isset($request->to_revenue)){
-            //     $fromRevenue = $request->from_revenue ? $request->from_revenue : 0;
-            //     $toRevenue = $request->to_revenue ? $request->to_revenue : 10000;
-            //     $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
-            // }
-            // if(isset($request->from_funding) || isset($request->to_funding)){
-            //     $fromFunding = $request->from_funding ? $request->from_funding : 0;
-            //     $toFunding = $request->to_funding ? $request->to_funding : 10000;
-            //     $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
-            // }
         }
 
-        // if(isset($request->name)) {
-        //     $name = $request->input('name');
-        //     $contacts->orWhere('first_name', 'LIKE', '%'.$name.'%');
-        //     $contacts->orWhere('last_name', 'LIKE', '%'.$name.'%');
-        // }
-
-        // if(isset($request->title)) {
-        //     logger('title' . $request->title);
-        //     $contacts = $contacts->orWhere('title', $request->title);
-        // }
-
-        // if(isset($request->seniority)) {
-        //     $contacts = $contacts->orWhereIn('seniority', $request->seniority);
-        // }
-
-        // if(isset($request->department)) {
-        //     $contacts = $contacts->orWhereIn('departments', $request->department);
-        // }
-
-        // if(isset($request->company)) {
-        //     $contacts = $contacts->orWhereIn('company', $request->company);
-        // }
-
-        // if(isset($request->exclude_company)) {
-        //     $contacts = $contacts->orWhereNotIn('company', $request->exclude_company);
-        // }
-
-        // if(isset($request->company_city)) {
-        //     $contacts = $contacts->orWhereIn('company_city', $request->company_city);
-        // }
-
-        // if(isset($request->company_state)) {
-        //     $contacts = $contacts->orWhereIn('company_state', $request->company_state);
-        // }
-
-        // if(isset($request->company_country)) {
-        //     $contacts = $contacts->orWhereIn('company_country', $request->company_country);
-        // }
-
-        // if(isset($request->city)) {
-        //     $contacts = $contacts->orWhereIn('city', $request->city);
-        // }
-
-        // if(isset($request->state)) {
-        //     $contacts = $contacts->orWhereIn('state', $request->state);
-        // }
-
-        // if(isset($request->country)) {
-        //     $contacts = $contacts->orWhereIn('country', $request->country);
-        // }
-
-        // if(isset($request->company)) {
-        //     $company = $request->input('company');
-        //     $contacts->whereIn('company', $company);
-        // }
-
-        // logger('FROM: '.$request->all);
-        // logger('To: ' .$request->to_employees);
-        // if($request->input('from_employees')) {
-
-            // logger($request->input('name') .'----'. $request->input('from_employees') .'----'. $request->input('to_employees'));
-        //     $contacts = $contacts->orWhereBetween('employees', [$request->input('from_employees'), $request->input('to_employees')]);
-        // }
-
-        // if(isset($request->from_employees) || isset($request->to_employees)) {
-        //     // logger('in');
-        //     $contacts = $contacts->orWhereBetween('employees', [$request->from_employees, $request->to_employees]);
-        // }
-
-        // if(isset($request->keywords)) {
-        //     $contacts = $contacts->orWhereIn('keywords', explode($request->keywords, ','));
-        // }
-
-        // if(isset($request->technologies)) {
-        //     $contacts = $contacts->orWhereIn('technologies', $request->technologies);
-        // }
-
-        // if(isset($request->from_revenue) || isset($request->to_revenue)) {
-        //     $contacts = $contacts->orWhereBetween('employees', [$request->from_revenue, $request->to_revenue]);
-        // }
-
-        // if(isset($request->latest_funding)) {
-        //     $contacts = $contacts->orWhereIn('latest_funding', $request->latest_funding);
-        // }
-
-        // if(isset($request->email_status)) {
-        //     $contacts = $contacts->orWhereIn('email_status', $request->email_status);
-        // }
         $totalData  = $totalFiltered = clone $contacts;
         $contacts   = ($limit == -1) ? $contacts : $contacts->offset($start)->limit($limit);
         $contacts   = $contacts->orderBy($order, $dir)->get();
@@ -362,116 +163,6 @@ class ContactsController extends Controller
         );
 
         return json_encode($json_data);
-
-        // if(isset($request->industry)) {
-        //     $data = $data->orWhereIn('industry', $request->industry);
-        // }
-
-        // if(isset($request->company)) {
-        //     if(isset($request->exclude_companies)) {
-        //         $data = $data->orWhereNotIn('company', $request->company);
-        //     } else {
-        //         $data = $data->orWhereIn('company', $request->company);
-        //     }
-        // }
-
-        // if(isset($request->company)) {
-        //     $data = $data->orWhereIn('company', $request->company);
-        // }
-
-        // if(isset($request->exclude_company)) {
-        //     $data = $data->orWhereNotIn('company', $request->exclude_company);
-        // }
-
-        // if(isset($request->departments)) {
-        //     $data = $data->orWhereIn('departments', $request->departments);
-        // }
-
-        // if(isset($request->from_employees) || isset($request->to_employees)) {
-        //     $data = $data->orWhereBetween('employees', [$request->from_employees, $request->to_employees]);
-        // }
-
-        // if(isset($request->from_revenue) || isset($request->to_revenue)) {
-        //     $data = $data->orWhereBetween('employees', [$request->from_revenue, $request->to_revenue]);
-        // }
-
-        // if(isset($request->from_funding) || isset($request->to_funding)) {
-        //     $data = $data->orWhereBetween('employees', [$request->from_funding, $request->to_funding]);
-        // }
-
-        // if(isset($request->title)) {
-        //     $data = $data->orWhereIn('title', $request->title);
-        // }
-
-        // if(isset($request->seniority)) {
-        //     $data = $data->orWhereIn('seniority', $request->seniority);
-        // }
-
-        // if(isset($request->email_status)) {
-        //     $data = $data->orWhereIn('email_status', $request->email_status);
-        // }
-
-        // if(isset($request->city)) {
-        //     $data = $data->orWhereIn('city', $request->city);
-        // }
-
-        // if(isset($request->state)) {
-        //     $data = $data->orWhereIn('state', $request->state);
-        // }
-
-        // if(isset($request->country)) {
-        //     $data = $data->orWhereIn('country', $request->country);
-        // }
-
-        // if(isset($request->company_city)) {
-        //     $data = $data->orWhereIn('company_city', $request->company_city);
-        // }
-
-        // if(isset($request->company_state)) {
-        //     $data = $data->orWhereIn('company_state', $request->company_state);
-        // }
-
-        // if(isset($request->company_country)) {
-        //     $data = $data->orWhereIn('company_country', $request->company_country);
-        // }
-
-        // if(isset($request->technologies)) {
-        //     $data = $data->orWhereIn('technologies', $request->technologies);
-        // }
-
-        // if(isset($request->latest_funding_type)) {
-        //     $data = $data->orWhereIn('latest_funding', $request->latest_funding_type);
-        // }
-
-        // if(isset($request->name)) {
-        //     $data = $data->orWhere('first_name', 'LIKE', '%'.$request->name.'%')
-        //         ->orWhere('last_name', 'LIKE', '%'.$request->name.'%');
-        // }
-
-        // if(isset($request->keywords)) {
-        //     $data = $data->orWhereIn('keywords', explode($request->keywords, ','));
-        // }
-
-
-        // if(isset($filters)) {
-
-        //     // Apply filters dynamically
-        //     foreach ($filters as $field => $value) {
-        //         // Skip empty values
-        //         if ($value !== null && $value !== '') {
-        //             $data = $data->orWhere($field, 'LIKE', '%'.$value.'%');
-        //         }
-        //     }
-        // }
-
-        // if(isset($rangeFilters)) {
-
-        // }
-
-        // $data = $data->orderBy('company')->orderBy('first_name')->orderBy('last_name')->paginate(50);
-
-        // return view('contacts.index',compact('data', 'groupOptions'))
-        //     ->with('i', ($request->input('page', 1) - 1) * 20);
     }
 
     /**
@@ -680,11 +371,6 @@ class ContactsController extends Controller
         if ($file->getClientOriginalExtension() !== 'csv') {
             return back()->withErrors(['file' => 'The uploaded file must be a CSV.']);
         }
-        // // Use the queue method to enable chunk importing
-        // Excel::queueImport(new ContactsImport, $file);
-        // // Excel::import(new ContactsImport, $file);
-
-        // Dispatch the job
 
         $filePath = $request->file('file')->store('uploads'); // Store the file
 

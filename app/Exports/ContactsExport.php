@@ -21,7 +21,6 @@ class ContactsExport implements FromCollection
     {
 
         $contacts = Contacts::query();
-logger('here1');
         if(isset($filters)){
             $fromEmployees = 0;
             $toEmployees = 1000000;
@@ -105,11 +104,7 @@ logger('here1');
             $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
             $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
         }
-logger('here2');
-
-// dd($contacts->get());
-return $contacts->take(10)->get();
-
+        return $contacts->take(10)->get();
         // return $contacts->get()->first();
 
     }
