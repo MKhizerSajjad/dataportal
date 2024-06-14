@@ -350,11 +350,37 @@ class ContactsController extends Controller
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function export()
+    public function export(Request $request)
     {
-        $filters = request()->filter;
-        return Excel::download(new ContactsExport($filters), 'contacts.csv');
-        // return back()->with('success','Contacts exported successfully');
+
+        try {
+            // get all filtered contacts
+            $contacts = new ContactsExport($request->all());
+
+
+            $fileName = 'contacts-'. Carbon::now()->timestamp .'.csv';
+            $filePath = 'exports/'.$fileName;
+            Excel::store($contacts, $filePath);
+
+            if (Storage::exists($filePath)) {
+                // return 'storage/app/'.$filePath;
+                // return public_path('storage/app/'.$filePath);
+
+                // return response()->json(['url' => Storage::url($filePath)]);
+                // return Storage::download($filePath);
+                // return "storage/app/public/".$filePath;
+                return response()->download(storage_path('app/'.$filePath))->deleteFileAfterSend(true);
+            } else {
+                return redirect()->route('contacts.index')->with('Oops!','We got some error.');
+            }
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('Error storing Excel file: ' . $e->getMessage());
+            // Return an error response
+            return redirect()->route('contacts.index')->with('Oops!','We got some error.');
+            // return response()->json(['error' => 'Error storing Excel file'], 500);
+        }
+
     }
 
     /**

@@ -258,7 +258,8 @@
                         <div class="card-body">
                             <h4 class="card-title">Contacts List</h4>
                             <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
-                                <a class="btn btn-primary waves-effect waves-light" id="export-data" href="#"> <i class="bx bx-export me-1"></i> Export Contacts</a>
+                                <a class="btn btn-primary waves-effect waves-light" href="{{ route('contacts.export') }}"> <i class="bx bx-export me-1"></i> Export Contacts</a>
+                                {{-- <a class="btn btn-primary waves-effect waves-light" id="export-data" href="#"> <i class="bx bx-export me-1"></i> Export Contacts</a> --}}
 
                                 {{-- <a href="{{ route('contacts.create') }}" class="btn btn-primary waves-effect waves-light w-10"> <i class="bx bx-plus me-1"></i> Add New</a> --}}
                             </div>
@@ -365,6 +366,14 @@
             initDatatable(selectedFilters)
         });
 
+
+        // $(document).on('click','#applyFilter',function(e) {
+        //     initDatatable(selectedFilters)
+        // });
+        // $(document).on('click','#removeFilter',function(e) {
+        //     initDatatable()
+        // });
+
         $(document).on('click','#export-data',function(e) {
 
             selectedFilters = {};
@@ -388,7 +397,20 @@
                 "data":{
                     _token: "{{ csrf_token() }}",
                     filter:selectedFilters
-                }
+                },
+        success: function(response) {
+            console.log(response)
+            // Create a hidden anchor element
+            var a = document.createElement('a');
+            a.href = response; // Get the file URL from the server response
+            // a.download = 'contacts.csv'; // Set the desired file name here
+            document.body.appendChild(a);
+            a.click(); // Trigger the download
+            document.body.removeChild(a); // Clean up
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
             });
 
         });
@@ -409,7 +431,27 @@
                 "data":{
                     _token: "{{ csrf_token() }}",
                     filter:filter,
-                    tus:email_status
+                    // name:name,
+                    // title:title,
+                    // seniority:seniority,
+                    // department:department,
+                    // company:company,
+                    // exclude_company:exclude_company,
+                    // city:city,
+                    // state:state,
+                    // country:country,
+                    // company_city:company_city,
+                    // company_state:company_state,
+                    // company_country:company_country,
+                    // from_employees:from_employees,
+                    // to_employees:to_employees,
+                    // industry:industry,
+                    // technologies:technologies,
+                    // from_revenue:from_revenue,
+                    // to_revenue:to_revenue,
+                    // from_funding:from_funding,
+                    // to_funding:to_funding,
+                    // email_status:email_status
                 }
             },
             bDestroy: true,
@@ -418,6 +460,8 @@
                 { "data": "company"},
                 { "data": "name"},
                 { "data": "title" },
+                // { "data": "person_email" },
+                // { "data": "person_phone" },
                 { "data": "email" },
                 { "data": "mobile_phone" },
                 { "data": "industry" },
@@ -439,6 +483,26 @@
                 "data":{
                     _token: "{{ csrf_token() }}",
                     filter:filter,
+                    // name:name,
+                    // title:title,
+                    // department:department,
+                    // company:company,
+                    // exclude_company:exclude_company,
+                    // city:city,
+                    // state:state,
+                    // country:country,
+                    // company_city:company_city,
+                    // company_state:company_state,
+                    // company_country:company_country,
+                    // from_employees:from_employees,
+                    // to_employees:to_employees,
+                    // industry:industry,
+                    // technologies:technologies,
+                    // from_revenue:from_revenue,
+                    // to_revenue:to_revenue,
+                    // from_funding:from_funding,
+                    // to_funding:to_funding,
+                    // email_status:email_status
                 }
             },
             bDestroy: true,
@@ -447,6 +511,8 @@
                 { "data": "name"},
                 { "data": "title" },
                 { "data": "company"},
+                // { "data": "person_email" },
+                // { "data": "person_phone" },
                 { "data": "email" },
                 { "data": "mobile_phone" },
                 { "data": "employees" },

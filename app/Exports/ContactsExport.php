@@ -104,7 +104,70 @@ class ContactsExport implements FromCollection
             $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
             $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
         }
-        return $contacts->take(10)->get();
+        $contacts = $contacts->limit(48000)->get();
+
+        $transformedData = collect([$this->headings()]);
+        // Transform data to replace IDs with actual values
+        $transformedData = $transformedData->merge($contacts->map(function ($item) {
+            return [
+                // 'date' => $item->date,
+                // 'status' => $item->status,
+                'first_name' => $item->first_name,
+                'last_name' => $item->last_name,
+                'title' => $item->title,
+                'company' => $item->company,
+                'company_name_for_emails' => $item->company_name_for_emails,
+                'email' => $item->email,
+                'email_status' => $item->email_status,
+                'email_confidence' => $item->email_confidence,
+                'seniority' => $item->seniority,
+                'departments' => $item->departments,
+                'contact_owner' => $item->contact_owner,
+                'first_phone' => $item->first_phone,
+                'work_direct_phone' => $item->work_direct_phone,
+                'home_phone' => $item->home_phone,
+                'mobile_phone' => $item->mobile_phone,
+                'corporate_phone' => $item->corporate_phone,
+                'other_phone' => $item->other_phone,
+                'stage' => $item->stage,
+                'lists' => $item->lists,
+                'last_contacted' => $item->last_contacted,
+                'account_owner' => $item->account_owner,
+                'employees' => $item->employees,
+                'industry' => $item->industry,
+                'keywords' => $item->keywords,
+                'person_linkedin' => $item->person_linkedin,
+                'website' => $item->website,
+                'company_linkedin_url' => $item->company_linkedin_url,
+                'facebook_url' => $item->facebook_url,
+                'twitter_url' => $item->twitter_url,
+                'city' => $item->city,
+                'state' => $item->state,
+                'country' => $item->country,
+                'company_address' => $item->company_address,
+                'company_city' => $item->company_city,
+                'company_state' => $item->company_state,
+                'company_country' => $item->company_country,
+                'company_phone' => $item->company_phone,
+                'seo_description' => $item->seo_description,
+                'technologies' => $item->technologies,
+                'annual_revenue' => $item->annual_revenue,
+                'total_funding' => $item->total_funding,
+                'latest_funding' => $item->latest_funding,
+                'latest_funding_amount' => $item->latest_funding_amount,
+                // 'last_raised_at' => $item->last_raised_at,
+                // 'email_sent' => $item->email_sent,
+                // 'email_open' => $item->email_open,
+                // 'email_bounced' => $item->email_bounced,
+                // 'replied' => $item->replied,
+                // 'demoed' => $item->demoed,
+                // 'number_of_retail_locations' => $item->number_of_retail_locations,
+                // 'apollo_contact_id' => $item->apollo_contact_id,
+                // 'apollo_account_id' => $item->apollo_account_id,
+            ];
+        }));
+
+        return $transformedData;
         // return $contacts->get()->first();
 
     }
@@ -117,7 +180,8 @@ class ContactsExport implements FromCollection
     public function headings(): array
     {
         return [
-            'status',
+            // 'date',
+            // 'status',
             'first_name',
             'last_name',
             'title',
@@ -161,15 +225,15 @@ class ContactsExport implements FromCollection
             'total_funding',
             'latest_funding',
             'latest_funding_amount',
-            'last_raised_at',
-            'email_sent',
-            'email_open',
-            'email_bounced',
-            'replied',
-            'demoed',
-            'number_of_retail_locations',
-            'apollo_contact_id',
-            'apollo_account_id'
+            // 'last_raised_at',
+            // 'email_sent',
+            // 'email_open',
+            // 'email_bounced',
+            // 'replied',
+            // 'demoed',
+            // 'number_of_retail_locations',
+            // 'apollo_contact_id',
+            // 'apollo_account_id'
         ];
 
     }
