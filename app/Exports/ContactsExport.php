@@ -104,7 +104,7 @@ class ContactsExport implements FromCollection
             $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
             $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
         }
-        $contacts = $contacts->limit(48000)->get();
+        $contacts = $contacts->limit(25000)->get();
 
         $transformedData = collect([$this->headings()]);
         // Transform data to replace IDs with actual values
