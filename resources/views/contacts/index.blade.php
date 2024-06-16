@@ -107,7 +107,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label mb-0">Comapny</label>
+                                    <label class="form-label mb-0">Company</label>
                                     <select name="company[]" id="company" data-filter="company" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
                                         @foreach (getCompanies() as $company)
                                             <option value="{{$company}}" @if(in_array($company, request()->input('company', []))) selected @endif>{{$company}}</option>
@@ -258,8 +258,8 @@
                         <div class="card-body">
                             <h4 class="card-title">Contacts List</h4>
                             <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
-                                <a class="btn btn-primary waves-effect waves-light" href="{{ route('contacts.export') }}"> <i class="bx bx-export me-1"></i> Export Contacts</a>
-                                {{-- <a class="btn btn-primary waves-effect waves-light" id="export-data" href="#"> <i class="bx bx-export me-1"></i> Export Contacts</a> --}}
+                                {{-- <a class="btn btn-primary waves-effect waves-light" href="{{ route('contacts.export') }}"> <i class="bx bx-export me-1"></i> Export Contacts</a> --}}
+                                <a class="btn btn-primary waves-effect waves-light" id="export-data" href="#"> <i class="bx bx-export me-1"></i> Export Contacts</a>
 
                                 {{-- <a href="{{ route('contacts.create') }}" class="btn btn-primary waves-effect waves-light w-10"> <i class="bx bx-plus me-1"></i> Add New</a> --}}
                             </div>
@@ -403,7 +403,7 @@
             // Create a hidden anchor element
             var a = document.createElement('a');
             a.href = response; // Get the file URL from the server response
-            // a.download = 'contacts.csv'; // Set the desired file name here
+            a.download = 'contacts.csv'; // Set the desired file name here
             document.body.appendChild(a);
             a.click(); // Trigger the download
             document.body.removeChild(a); // Clean up

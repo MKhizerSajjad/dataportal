@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
     Route::resource('contacts', ContactsController::class)->names('contacts');
     // Route::post('contacts-export', [ContactsController::class, 'export'])->name('contacts.export');
-    Route::get('contacts-export', [ContactsController::class, 'export'])->name('contacts.export');
+    Route::post('contacts-export', [ContactsController::class, 'export'])->name('contacts.export');
     Route::post('contacts-import', [ContactsController::class, 'import'])->name('contacts.import');
     Route::post('contacts-data', [ContactsController::class, 'data'])->name('contacts.data');
     // Route::get('packages', PackagesController::class)->name('packages');

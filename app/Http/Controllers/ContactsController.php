@@ -361,18 +361,31 @@ class ContactsController extends Controller
             $fileName = 'contacts-'. Carbon::now()->timestamp .'.csv';
             $filePath = 'exports/'.$fileName;
             Excel::store($contacts, $filePath);
+            // logger('PATH : ' . $filePath);
 
-            if (Storage::exists($filePath)) {
-                // return 'storage/app/'.$filePath;
-                // return public_path('storage/app/'.$filePath);
+
+            // $filePath = storage_path($filePath);
+            // logger('222' . $filePath);
+            // logger('3333'  . Storage::download($filePath));
+            // return Storage::download($filePath);
+            // logger('3333 --- '  . 'storage/app/exports/'.$fileName);
+            return 'storage/app/exports/'.$fileName;
 
                 // return response()->json(['url' => Storage::url($filePath)]);
-                // return Storage::download($filePath);
-                // return "storage/app/public/".$filePath;
-                return response()->download(storage_path('app/'.$filePath))->deleteFileAfterSend(true);
-            } else {
-                return redirect()->route('contacts.index')->with('Oops!','We got some error.');
-            }
+
+            // if (Storage::exists($filePath)) {
+            //     // return 'storage/app/'.$filePath;
+            //     // return public_path('storage/app/'.$filePath);
+
+            //     // return response()->json(['url' => Storage::url($filePath)]);
+            //     // return Storage::download($filePath);
+            //     // return "storage/app/public/".$filePath;
+            //     logger('----------in--------------');
+            //     return $filePath;
+            //     // return response()->download(storage_path('app/'.$filePath))->deleteFileAfterSend(true);
+            // } else {
+            //     return redirect()->route('contacts.index')->with('Oops!','We got some error.');
+            // }
         } catch (\Exception $e) {
             // Log the error
             \Log::error('Error storing Excel file: ' . $e->getMessage());
