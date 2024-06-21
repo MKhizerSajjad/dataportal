@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Contacts extends Model
+class States extends Model
 {
     use HasFactory;
-    protected $table = 'contacts';
+    protected $table = 'states';
+    public static $snakeAttributes = false;
+
     protected $guarded;
 }
