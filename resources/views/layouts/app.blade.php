@@ -301,6 +301,8 @@
                 </div>
             @endguest
 
+
+            <a href="#" download="" id="export-excel"></a>
         @include('layouts/includes.js')
         @stack('script')
     </body>

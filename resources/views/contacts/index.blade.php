@@ -65,53 +65,58 @@
                             <h4 class="card-title mb-4">Filters</h4>
                             <form action="{{ route('contacts.index') }}" method="GET">
                                 @csrf
-                                {{-- <div class="row mb-3">
+                                <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <button type="submit" class="btn btn-primary waves-effect waves-light w-100"> <i class="bx bx-filter-alt me-1"></i>Apply</button>
+                                        <button type="button" id="apply-filter" class="btn btn-primary waves-effect waves-light w-100"> <i class="bx bx-filter-alt me-1"></i>Apply</button>
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="{{ route('contacts.index') }}" class="waves-effect waves-light btn btn-secondary w-100"> <i class="bx bx-crosshair me-1"></i>Remove</a>
+                                        <button type="button" id="remove-filter" class="waves-effect waves-light btn btn-secondary w-100"> <i class="bx bx-crosshair me-1"></i>Remove</button>
                                     </div>
-                                </div> --}}
+                                </div>
 
                                 <div class="mb-0">
                                     <label for="name" class="mb-0">Name</label>
                                     <input type="text" name="name" id="name" input-filter="name" class="input form-control" value="{{ request()->input('name') }}"><br>
                                 </div>
 
+                                {{-- <div class="mb-3">
+                                    <label class="form-label mb-0">Job Title</label>
+                                    <select name="title[]" id="title" class="select2 form-control select2-multiple" multiple="multiple" data-placeholder="Choose ...">
+                                    </select>
+                                </div> --}}
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Job Title</label>
                                     <select name="title[]" id="title" data-filter="title" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach (getTitles() as $title)
+                                        {{-- @foreach (getTitles() as $title)
                                             <option value="{{$title}}" @if(in_array($title, request()->input('titles', []))) selected @endif>{{$title}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Seniority</label>
                                     <select name="seniority[]" id="seniority" data-filter="seniority" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach (getSeniority() as $seniority)
+                                        {{-- @foreach (getSeniority() as $seniority)
                                             <option value="{{$seniority}}" @if(in_array($seniority, request()->input('seniority', []))) selected @endif>{{$seniority}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Department</label>
                                     <select name="department[]" id="department" data-filter="department" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach (getDepartments() as $department)
+                                        {{-- @foreach (getDepartments() as $department)
                                             <option value="{{$department}}" @if(in_array($department, request()->input('departments', []))) selected @endif>{{$department}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Company</label>
                                     <select name="company[]" id="company" data-filter="company" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach (getCompanies() as $company)
+                                        {{-- @foreach (getCompanies() as $company)
                                             <option value="{{$company}}" @if(in_array($company, request()->input('company', []))) selected @endif>{{$company}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
 
@@ -122,34 +127,34 @@
                                         <code><b>Exclude companies</b></code>
                                     </p>
                                     <select name="exclude_company[]" id="exclude_company" data-filter="exclude_company" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach (getCompanies() as $company)
+                                        {{-- @foreach (getCompanies() as $company)
                                             <option value="{{$company}}" @if(in_array($company, request()->input('exclude_company', []))) selected @endif>{{$company}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Person Address</label>
                                     <div class="mb-1">
                                         <select name="city[]" id="city" data-filter="city" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Select City">
-                                            @foreach (getCities() as $city)
+                                            {{-- @foreach (getCities() as $city)
                                                 <option value="{{$city}}" @if(in_array($city, request()->input('city', []))) selected @endif>{{$city}}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
 
                                     <div class="mb-1">
                                         <select name="state[]" id="state" data-filter="state" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Select State">
-                                            @foreach (getStates() as $state)
+                                            {{-- @foreach (getStates() as $state)
                                                 <option value="{{$state}}" @if(in_array($state, request()->input('state', []))) selected @endif>{{$state}}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
 
                                     <div class="mb-1">
                                         <select name="country[]" id="country" data-filter="country" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Select Country">
-                                            @foreach (getcountries() as $country)
+                                            {{-- @foreach (getcountries() as $country)
                                                 <option value="{{$country}}" @if(in_array($country, request()->input('country', []))) selected @endif>{{$country}}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                 </div>
@@ -158,25 +163,25 @@
                                     <label class="form-label mb-0">Company Address</label>
                                     <div class="mb-1">
                                         <select name="company_city[]" id="company_city" data-filter="company_city" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Select City">
-                                            @foreach (getCompanyCities() as $company_city)
+                                            {{-- @foreach (getCompanyCities() as $company_city)
                                                 <option value="{{$company_city}}" @if(in_array($company_city, request()->input('company_city', []))) selected @endif>{{$company_city}}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
 
                                     <div class="mb-1">
                                         <select name="company_state[]" id="company_state" data-filter="company_state" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Select State">
-                                            @foreach (getCompanyStates() as $company_state)
+                                            {{-- @foreach (getCompanyStates() as $company_state)
                                                 <option value="{{$company_state}}" @if(in_array($company_state, request()->input('company_state', []))) selected @endif>{{$company_state}}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
 
                                     <div class="mb-1">
                                         <select name="company_country[]" id="company_country" data-filter="company_country" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Select Country">
-                                            @foreach (getCompanyCountries() as $company_country)
+                                            {{-- @foreach (getCompanyCountries() as $company_country)
                                                 <option value="{{$company_country}}" @if(in_array($company_country, request()->input('company_country', []))) selected @endif>{{$company_country}}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                 </div>
@@ -193,9 +198,9 @@
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Industry</label>
                                     <select name="industry[]" id="industry" data-filter="industry" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach (getIndustries() as $industry)
+                                        {{-- @foreach (getIndustries() as $industry)
                                             <option value="{{$industry}}" @if(in_array($industry, request()->input('industry', []))) selected @endif>{{$industry}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
 
@@ -208,9 +213,9 @@
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Technologies</label>
                                     <select name="technologies[]" id="technologies" data-filter="technologies" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach (getTechnologies() as $technology)
+                                        {{-- @foreach (getTechnologies() as $technology)
                                             <option value="{{$technology}}" @if(in_array($technology, request()->input('technologies', []))) selected @endif>{{$technology}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
 
@@ -244,9 +249,9 @@
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Email Status</label>
                                     <select name="email_status[]" id="email_status" data-filter="email_status" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach (getEmailStatus() as $status)
+                                        {{-- @foreach (getEmailStatus() as $status)
                                             <option value="{{$status}}" @if(in_array($status, request()->input('email_status', []))) selected @endif>{{$status}}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                             </form>
@@ -345,6 +350,54 @@
     $(document).ready(function(){
         initDatatable()
 
+        // Filters Start
+        // Initialize Select2 for different elements
+        initializeSelect2('title', "{{ route('jobs-titles') }}", 'Choose ...');
+        initializeSelect2('seniority', "{{ route('seniorities') }}", 'Choose ...');
+        initializeSelect2('department', "{{ route('departments') }}", 'Choose ...');
+        initializeSelect2('company', "{{ route('companies') }}", 'Choose ...');
+        initializeSelect2('exclude_company', "{{ route('companies') }}", 'Choose ...');
+        initializeSelect2('city', "{{ route('cities') }}", 'Choose ...');
+        initializeSelect2('state', "{{ route('states') }}", 'Choose ...');
+        initializeSelect2('country', "{{ route('countries') }}", 'Choose ...');
+        initializeSelect2('company_city', "{{ route('cities') }}", 'Choose ...');
+        initializeSelect2('company_state', "{{ route('states') }}", 'Choose ...');
+        initializeSelect2('company_country', "{{ route('countries') }}", 'Choose ...');
+        initializeSelect2('industry', "{{ route('industries') }}", 'Choose ...');
+        initializeSelect2('technologies', "{{ route('technologies') }}", 'Choose ...');
+
+        function initializeSelect2(elementId, routeName, placeholderText) {
+            $('#' + elementId).select2({
+                placeholder: placeholderText,
+                ajax: {
+                    url: routeName, // Use the routeName variable directly as it's already a string
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(data) {
+                        var formattedData = data.map(function(item) {
+                            return {
+                                id: item.name,
+                                text: item.name
+                            };
+                        });
+
+                        return {
+                            results: formattedData
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 3
+            });
+        }
+
+        // Filters End
+
         name =null;
         title =null;
 
@@ -355,7 +408,7 @@
             let type  = $(this).attr('input-filter');
             selectedFilters[type] = value;
             console.log(selectedFilters);
-            initDatatable(selectedFilters)
+            // initDatatable(selectedFilters)
         })/*, 400)*/;
 
         $('.filter').on('select2:select', function(e) {
@@ -363,16 +416,24 @@
             let type  = $(this).attr('data-filter');
             selectedFilters[type] = value;
             console.log(selectedFilters);
-            initDatatable(selectedFilters)
+            // initDatatable(selectedFilters)
         });
 
 
-        // $(document).on('click','#applyFilter',function(e) {
-        //     initDatatable(selectedFilters)
-        // });
-        // $(document).on('click','#removeFilter',function(e) {
-        //     initDatatable()
-        // });
+        $(document).on('click','#apply-filter',function(e) {
+            initDatatable(selectedFilters)
+        });
+        $(document).on('click','#remove-filter',function(e) {
+
+            $('.input').each(function(i, v) {
+                let value = $(v).val('');
+            });
+
+            $('.filter').each(function(i, v) {
+                let value = $(v).val(null).trigger('change');
+            });
+            initDatatable()
+        });
 
         $(document).on('click','#export-data',function(e) {
 
@@ -400,13 +461,11 @@
                 },
         success: function(response) {
             console.log(response)
+            $('#export-excel').attr('href', 'http://127.0.0.1:400/' + response);
+            $('#export-excel')[0].click();
             // Create a hidden anchor element
-            var a = document.createElement('a');
-            a.href = response; // Get the file URL from the server response
-            a.download = 'contacts.csv'; // Set the desired file name here
-            document.body.appendChild(a);
-            a.click(); // Trigger the download
-            document.body.removeChild(a); // Clean up
+
+            // document.body.removeChild(a); // Clean up
         },
         error: function(xhr, status, error) {
             console.error(error);

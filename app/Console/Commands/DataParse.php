@@ -138,7 +138,7 @@ class DataParse extends Command
 
             $company = Company::updateOrCreate(
                 [
-                    'company' => $contact['company'],
+                    'name' => $contact['company'],
                     'email' => $contact['email'],
                 ],
                 [

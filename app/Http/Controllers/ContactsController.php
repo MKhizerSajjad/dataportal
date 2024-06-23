@@ -45,98 +45,166 @@ class ContactsController extends Controller
         $order               = $columns[$request->input('order.0.column')];
         $dir                 = $request->input('order.0.dir');
 
-        $contacts   = Contacts::query();
-        $filters    = @$request->filter;
+$contacts = Contacts::query();
+$filters = $request->filter;
 
-        if(isset($filters)){
-            foreach($filters as $key => $filter){
-                if( $key == 'name' && $filter != null ){
-                    $contacts =  $contacts
-                        ->orWhere('first_name', 'LIKE', '%'.$filter.'%')
-                        ->orWhere('last_name', 'LIKE', '%'.$filter.'%');
-                }
-                if( $key == 'title' && $filter != null ){
-                    $contacts =  $contacts->orWhereIn('title', $filter);
-                }
-                if($key == 'seniority' && $filter != null){
-                    $contacts = $contacts->orWhereIn('seniority', $filter);
-                }
-                if($key == 'department' && $filter != null){
-                    $contacts = $contacts->orWhereIn('departments', $filter);
-                }
-                if($key == 'company' && $filter != null){
-                    $contacts = $contacts->orWhereIn('company', $filter);
-                }
-                if($key == 'exclude_company' && $filter != null){
-                    $contacts = $contacts->orWhereNotIn('company', $filter);
-                }
-                if($key == 'company_city' && $filter != null){
-                    $contacts = $contacts->orWhereIn('company_city', $filter);
-                }
-                if($key == 'company_state' && $filter != null){
-                    $contacts = $contacts->orWhereIn('company_state', $filter);
-                }
-                if($key == 'company_country' && $filter != null){
-                    $contacts = $contacts->orWhereIn('company_country', $filter);
-                }
-                if($key == 'city' && $filter != null){
-                    $contacts = $contacts->orWhereIn('city', $filter);
-                }
-                if($key == 'state' && $filter != null){
-                    $contacts = $contacts->orWhereIn('state', $filter);
-                }
-                if($key == 'country' && $filter != null){
-                    $contacts = $contacts->orWhereIn('country', $filter);
-                }
-                $fromEmployees = 0;
-                if($key == 'from_employees' && $filter != null) {
-                    $fromEmployees = $filter;
-                }
-                $toEmployees = 1000000;
-                if($key == 'to_employees' && $filter != null) {
-                    $toEmployees = $filter;
-                }
-                if($key == 'industry' && $filter != null){
-                    $contacts = $contacts->orWhereIn('industry', $filter);
-                }
-                if($key == 'keywords' && $filter != null){
-                    // VALIDATE THIS
-                    $contacts = $contacts->orWhereIn('keywords', $filter);
-                }
-                if($key == 'technologies' && $filter != null){
-                    // VALIDATE THIS
-                    $contacts = $contacts->orWhereIn('technologies', $filter);
-                }
-                $fromRevenue = 0;
-                if($key == 'from_revenue' && $filter != null) {
-                    $fromRevenue = $filter;
-                }
-                $toRevenue = 10000000000;
-                if($key == 'to_revenue' && $filter != null) {
-                    $toRevenue = $filter;
-                }
-                $fromFunding = 0;
-                if($key == 'from_funding' && $filter != null) {
-                    $fromFunding = $filter;
-                }
-                $toFunding = 10000000000;
-                if($key == 'to_funding' && $filter != null) {
-                    $toFunding = $filter;
-                }
-                if($key == 'email_status' && $filter != null){
-                    $contacts = $contacts->orWhereIn('email_status', $filter);
-                }
-            }
-            $contacts = $contacts->orWhereBetween('employees', [$fromEmployees, $toEmployees]);
-            $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
-            $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
-
+if ($filters) {
+    foreach ($filters as $key => $filter) {
+        if ($filter === null || $filter === '') {
+            continue; // Skip empty filters
         }
 
-        $totalData  = $totalFiltered = clone $contacts;
-        $contacts   = ($limit == -1) ? $contacts : $contacts->offset($start)->limit($limit);
-        $contacts   = $contacts->orderBy($order, $dir)->get();
-        $totalData  = $totalFiltered = $totalFiltered->count();
+        switch ($key) {
+            case 'name':
+                $contacts->where(function($query) use ($filter) {
+                    $query->where('first_name', 'LIKE', '%' . $filter . '%')
+                          ->orWhere('last_name', 'LIKE', '%' . $filter . '%');
+                });
+                break;
+            case 'title':
+            case 'seniority':
+            case 'departments':
+            case 'company':
+            case 'company_city':
+            case 'company_state':
+            case 'company_country':
+            case 'city':
+            case 'state':
+            case 'country':
+            case 'industry':
+            case 'email_status':
+                $contacts->whereIn($key, (array) $filter);
+                break;
+            case 'exclude_company':
+                $contacts->whereNotIn('company', (array) $filter);
+                break;
+            case 'from_employees':
+                $fromEmployees = $filter;
+                break;
+            case 'to_employees':
+                $toEmployees = $filter;
+                break;
+            case 'from_revenue':
+                $fromRevenue = $filter;
+                break;
+            case 'to_revenue':
+                $toRevenue = $filter;
+                break;
+            case 'from_funding':
+                $fromFunding = $filter;
+                break;
+            case 'to_funding':
+                $toFunding = $filter;
+                break;
+            // Add handling for 'keywords' and 'technologies' if necessary
+        }
+    }
+
+    // Additional where clauses for range filters
+    $contacts->whereBetween('employees', [$fromEmployees ?? 0, $toEmployees ?? 1000000]);
+    $contacts->whereBetween('annual_revenue', [$fromRevenue ?? 0, $toRevenue ?? 10000000000]);
+    $contacts->whereBetween('latest_funding', [$fromFunding ?? 0, $toFunding ?? 10000000000]);
+}
+
+$totalFiltered = clone $contacts;
+$totalFiltered = $totalFiltered->count();
+
+$contacts = ($limit == -1) ? $contacts : $contacts->offset($start)->limit($limit);
+$contacts = $contacts->orderBy($order, $dir)->get();
+$totalData = $totalFiltered;
+
+        // $contacts   = Contacts::query();
+        // $filters    = @$request->filter;
+
+        // if(isset($filters)){
+        //     foreach($filters as $key => $filter){
+        //         if( $key == 'name' && $filter != null ){
+        //             $contacts =  $contacts
+        //                 ->orWhere('first_name', 'LIKE', '%'.$filter.'%')
+        //                 ->orWhere('last_name', 'LIKE', '%'.$filter.'%');
+        //         }
+        //         if( $key == 'title' && $filter != null ){
+        //             $contacts =  $contacts->orWhereIn('title', $filter);
+        //         }
+        //         if($key == 'seniority' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('seniority', $filter);
+        //         }
+        //         if($key == 'department' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('departments', $filter);
+        //         }
+        //         if($key == 'company' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('company', $filter);
+        //         }
+        //         if($key == 'exclude_company' && $filter != null){
+        //             $contacts = $contacts->orWhereNotIn('company', $filter);
+        //         }
+        //         if($key == 'company_city' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('company_city', $filter);
+        //         }
+        //         if($key == 'company_state' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('company_state', $filter);
+        //         }
+        //         if($key == 'company_country' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('company_country', $filter);
+        //         }
+        //         if($key == 'city' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('city', $filter);
+        //         }
+        //         if($key == 'state' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('state', $filter);
+        //         }
+        //         if($key == 'country' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('country', $filter);
+        //         }
+        //         $fromEmployees = 0;
+        //         if($key == 'from_employees' && $filter != null) {
+        //             $fromEmployees = $filter;
+        //         }
+        //         $toEmployees = 1000000;
+        //         if($key == 'to_employees' && $filter != null) {
+        //             $toEmployees = $filter;
+        //         }
+        //         if($key == 'industry' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('industry', $filter);
+        //         }
+        //         if($key == 'keywords' && $filter != null){
+        //             // VALIDATE THIS
+        //             $contacts = $contacts->orWhereIn('keywords', $filter);
+        //         }
+        //         if($key == 'technologies' && $filter != null){
+        //             // VALIDATE THIS
+        //             $contacts = $contacts->orWhereIn('technologies', $filter);
+        //         }
+        //         $fromRevenue = 0;
+        //         if($key == 'from_revenue' && $filter != null) {
+        //             $fromRevenue = $filter;
+        //         }
+        //         $toRevenue = 10000000000;
+        //         if($key == 'to_revenue' && $filter != null) {
+        //             $toRevenue = $filter;
+        //         }
+        //         $fromFunding = 0;
+        //         if($key == 'from_funding' && $filter != null) {
+        //             $fromFunding = $filter;
+        //         }
+        //         $toFunding = 10000000000;
+        //         if($key == 'to_funding' && $filter != null) {
+        //             $toFunding = $filter;
+        //         }
+        //         if($key == 'email_status' && $filter != null){
+        //             $contacts = $contacts->orWhereIn('email_status', $filter);
+        //         }
+        //     }
+        //     $contacts = $contacts->orWhereBetween('employees', [$fromEmployees, $toEmployees]);
+        //     $contacts = $contacts->orWhereBetween('annual_revenue', [$fromRevenue, $toRevenue]);
+        //     $contacts = $contacts->orWhereBetween('latest_funding', [$fromFunding, $toFunding]);
+
+        // }
+
+        // $totalData  = $totalFiltered = clone $contacts;
+        // $contacts   = ($limit == -1) ? $contacts : $contacts->offset($start)->limit($limit);
+        // $contacts   = $contacts->orderBy($order, $dir)->get();
+        // $totalData  = $totalFiltered = $totalFiltered->count();
 
         $data = [];
         foreach ($contacts as $key =>  $contact) {
@@ -359,7 +427,7 @@ class ContactsController extends Controller
 
 
             $fileName = 'contacts-'. Carbon::now()->timestamp .'.csv';
-            $filePath = 'exports/'.$fileName;
+            $filePath = 'public/exports/'.$fileName;
             Excel::store($contacts, $filePath);
             // logger('PATH : ' . $filePath);
 
@@ -369,8 +437,8 @@ class ContactsController extends Controller
             // logger('3333'  . Storage::download($filePath));
             // return Storage::download($filePath);
             // logger('3333 --- '  . 'storage/app/exports/'.$fileName);
-            return 'storage/app/exports/'.$fileName;
-
+            // return 'public/storage/exports/'.$fileName;
+            return 'storage/'.$filePath;
                 // return response()->json(['url' => Storage::url($filePath)]);
 
             // if (Storage::exists($filePath)) {
