@@ -437,6 +437,8 @@
 
         $(document).on('click','#export-data',function(e) {
 
+            alert('Your data is being exported. Please wait.');
+
             selectedFilters = {};
 
             $('.input').each(function(i, v) {
@@ -460,7 +462,8 @@
                     filter:selectedFilters
                 },
         success: function(response) {
-            console.log(response)
+            // console.log(response)
+
             var appUrl = "{{ config('app.url') }}";
             $('#export-excel').attr('href', appUrl + response);
             $('#export-excel')[0].click();
