@@ -461,7 +461,8 @@
                 },
         success: function(response) {
             console.log(response)
-            $('#export-excel').attr('href', 'http://127.0.0.1:400/' + response);
+            var appUrl = "{{ config('app.url') }}";
+            $('#export-excel').attr('href', appUrl + response);
             $('#export-excel')[0].click();
             // Create a hidden anchor element
 
