@@ -55,16 +55,32 @@ if ($filters) {
         }
 
         switch ($key) {
-            case 'name':
+            case 'first_name':
                 $contacts->where(function($query) use ($filter) {
-                    $query->where('first_name', 'LIKE', '%' . $filter . '%')
-                          ->orWhere('last_name', 'LIKE', '%' . $filter . '%');
+                    $query->where('first_name', 'LIKE', '%' . $filter . '%');
+                });
+                break;
+            case 'last_name':
+                $contacts->where(function($query) use ($filter) {
+                    $query->Where('last_name', 'LIKE', '%' . $filter . '%');
                 });
                 break;
             case 'title':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->orWhere('title', 'LIKE', '%' . $value . '%');
+                    }
+                });
+                break;
             case 'seniority':
             case 'departments':
             case 'company':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->orWhere('company', 'LIKE', '%' . $value . '%');
+                    }
+                });
+                break;
             case 'company_city':
             case 'company_state':
             case 'company_country':

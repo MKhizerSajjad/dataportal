@@ -75,8 +75,12 @@
                                 </div>
 
                                 <div class="mb-0">
-                                    <label for="name" class="mb-0">Name</label>
-                                    <input type="text" name="name" id="name" input-filter="name" class="input form-control" value="{{ request()->input('name') }}"><br>
+                                    <label for="first_name" class="mb-0">First Name</label>
+                                    <input type="text" name="first_name" id="first_name" input-filter="first_name" class="input form-control" value="{{ request()->input('first_name') }}"><br>
+                                </div>
+                                <div class="mb-0">
+                                    <label for="last_name" class="mb-0">Last Name</label>
+                                    <input type="text" name="last_name" id="last_name" input-filter="last_name" class="input form-control" value="{{ request()->input('last_name') }}"><br>
                                 </div>
 
                                 {{-- <div class="mb-3">
@@ -121,7 +125,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label mb-0">Comapny</label>
+                                    <label class="form-label mb-0">Company</label>
 
                                     <p class="card-title-desc font-size-10 mb-0">
                                         <code><b>Exclude companies</b></code>
@@ -189,9 +193,9 @@
                                 <div class="mb-0">
                                     <label for="name" class="mb-0">Employees</label>
                                     <div class="btn-group btn-group-example mb-3" role="group" bis_skin_checked="1">
-                                        <input type="number" name="from_employees" id="from_employees" input-filter="from_employees" class="input form-control" value="{{ request()->input('from_employees') }}">
+                                        <input type="text" name="from_employees" id="from_employees" input-filter="from_employees" class="input form-control number-input" value="{{ request()->input('from_employees') }}">
                                         <span class="bg bg-primary text-light p-2">To</span>
-                                        <input type="number" name="to_employees" id="to_employees" input-filter="to_employees" class="input form-control" value="{{ request()->input('to_employees') }}">
+                                        <input type="text" name="to_employees" id="to_employees" input-filter="to_employees" class="input form-control number-input" value="{{ request()->input('to_employees') }}">
                                     </div>
                                 </div>
 
@@ -222,18 +226,18 @@
                                 <div class="mb-0">
                                     <label for="name" class="mb-0">Annual Revenue</label>
                                     <div class="btn-group btn-group-example mb-3" role="group" bis_skin_checked="1">
-                                        <input type="number" name="from_revenue" id="from_revenue" input-filter="from_revenue" class="input form-control" value="{{ request()->input('from_revenue') }}">
+                                        <input type="text" name="from_revenue" id="from_revenue" input-filter="from_revenue" class="input form-control number-input" value="{{ request()->input('from_revenue') }}">
                                         <span class="bg bg-primary text-light p-2">To</span>
-                                        <input type="number" name="to_revenue" id="to_revenue" input-filter="to_revenue" class="input form-control" value="{{ request()->input('to_revenue') }}">
+                                        <input type="text" name="to_revenue" id="to_revenue" input-filter="to_revenue" class="input form-control number-input" value="{{ request()->input('to_revenue') }}">
                                     </div>
                                 </div>
 
                                 <div class="mb-0">
                                     <label for="name" class="mb-0">Total Funding</label>
                                     <div class="btn-group btn-group-example mb-3" role="group" bis_skin_checked="1">
-                                        <input type="number" name="from_funding" id="from_funding" input-filter="from_funding" class="input form-control" value="{{ request()->input('from_funding') }}">
+                                        <input type="text" name="from_funding" id="from_funding" input-filter="from_funding" class="input form-control number-input" value="{{ request()->input('from_funding') }}">
                                         <span class="bg bg-primary text-light p-2">To</span>
-                                        <input type="number" name="to_funding" id="to_funding" input-filter="to_funding" class="input form-control" value="{{ request()->input('to_funding') }}">
+                                        <input type="text" name="to_funding" id="to_funding" input-filter="to_funding" class="input form-control number-input" value="{{ request()->input('to_funding') }}">
                                     </div>
                                 </div>
 
@@ -348,6 +352,18 @@
 <script>
 
     $(document).ready(function(){
+
+        // Function to format number with thousands separator
+        function formatNumberInput(selector) {
+            $(selector).on('input', function() {
+                var formattedValue = $(this).val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                $(this).val(formattedValue); // Update the input field with formatted value
+            });
+        }
+        // Call formatNumberInput function for all elements with class 'number-input'
+        formatNumberInput('.number-input');
+
+
         initDatatable()
 
         // Filters Start
