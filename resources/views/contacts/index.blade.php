@@ -355,9 +355,26 @@
 
         // Function to format number with thousands separator
         function formatNumberInput(selector) {
+            //     $(selector).on('input', function() {
+            //         var formattedValue = $(this).val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            //         $(this).val(formattedValue); // Update the input field with formatted value
+            //     });
+
             $(selector).on('input', function() {
-                var formattedValue = $(this).val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                $(this).val(formattedValue); // Update the input field with formatted value
+                // Get the current value from the input field
+                let inputValue = $(this).val();
+
+                // Remove commas from the current value to avoid interference
+                let numberValue = inputValue.replace(/,/g, '');
+
+                // Parse the number from the input (handle "lac" and other abbreviations)
+                let parsedNumber = parseFloat(numberValue);
+
+                // Format the parsed number with commas
+                let formattedValue = parsedNumber.toLocaleString('en-US');
+
+                // Update the input field with the formatted value
+                $(this).val(formattedValue);
             });
         }
         // Call formatNumberInput function for all elements with class 'number-input'
