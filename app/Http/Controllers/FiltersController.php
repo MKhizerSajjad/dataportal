@@ -61,7 +61,7 @@ class FiltersController extends Controller
 
     public function getCompanies(Request $request)
     {
-        return Company::where('name', 'LIKE', $request->search.'%')->select('id', 'name')->get();
+        return Company::where('name', 'LIKE', $request->search.'%')->distinct('name')->select('id', 'name')->get();
     }
 
     public function getCities(Request $request)
