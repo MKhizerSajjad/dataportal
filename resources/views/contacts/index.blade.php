@@ -385,21 +385,21 @@
 
         // Filters Start
         // Initialize Select2 for different elements
-        initializeSelect2('title', "{{ route('jobs-titles') }}", 'Choose ...');
-        initializeSelect2('seniority', "{{ route('seniorities') }}", 'Choose ...');
-        initializeSelect2('department', "{{ route('departments') }}", 'Choose ...');
-        initializeSelect2('company', "{{ route('companies') }}", 'Choose ...');
-        initializeSelect2('exclude_company', "{{ route('companies') }}", 'Choose ...');
-        initializeSelect2('city', "{{ route('cities') }}", 'Choose ...');
-        initializeSelect2('state', "{{ route('states') }}", 'Choose ...');
-        initializeSelect2('country', "{{ route('countries') }}", 'Choose ...');
-        initializeSelect2('company_city', "{{ route('cities') }}", 'Choose ...');
-        initializeSelect2('company_state', "{{ route('states') }}", 'Choose ...');
-        initializeSelect2('company_country', "{{ route('countries') }}", 'Choose ...');
-        initializeSelect2('industry', "{{ route('industries') }}", 'Choose ...');
-        initializeSelect2('technologies', "{{ route('technologies') }}", 'Choose ...');
+        initializeSelect2('title', "{{ route('jobs-titles') }}", 'Choose ...', 3);
+        initializeSelect2('seniority', "{{ route('seniorities') }}", 'Choose ...', null);
+        initializeSelect2('department', "{{ route('departments') }}", 'Choose ...', null);
+        initializeSelect2('company', "{{ route('companies') }}", 'Choose ...', 3);
+        initializeSelect2('exclude_company', "{{ route('companies') }}", 'Choose ...', 3);
+        initializeSelect2('city', "{{ route('cities') }}", 'Choose ...', 3);
+        initializeSelect2('state', "{{ route('states') }}", 'Choose ...', 3);
+        initializeSelect2('country', "{{ route('countries') }}", 'Choose ...', 3);
+        initializeSelect2('company_city', "{{ route('cities') }}", 'Choose ...', 3);
+        initializeSelect2('company_state', "{{ route('states') }}", 'Choose ...', 3);
+        initializeSelect2('company_country', "{{ route('countries') }}", 'Choose ...', 3);
+        initializeSelect2('industry', "{{ route('industries') }}", 'Choose ...', 3);
+        initializeSelect2('technologies', "{{ route('technologies') }}", 'Choose ...', 3);
 
-        function initializeSelect2(elementId, routeName, placeholderText) {
+        function initializeSelect2(elementId, routeName, placeholderText, minSearchLimit) {
             $('#' + elementId).select2({
                 placeholder: placeholderText,
                 ajax: {
@@ -425,7 +425,7 @@
                     },
                     cache: true
                 },
-                minimumInputLength: 3
+                minimumInputLength: minSearchLimit
             });
         }
 
