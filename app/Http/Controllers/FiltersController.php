@@ -25,7 +25,7 @@ class FiltersController extends Controller
 
     public function getJobTitles(Request $request)
     {
-        $formattedTitles = Title::where('name', 'LIKE', $request->search.'%')->select('id', 'name')->get();
+        $formattedTitles = Title::where('name', 'LIKE', $request->search.'%')->select('id', 'name')->orderBy('name')->get();
 
         return response()->json($formattedTitles);
         // $query = Title::query();
@@ -51,41 +51,45 @@ class FiltersController extends Controller
 
     public function getSeniorities(Request $request)
     {
-        return Seniority::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->get();
+        return Seniority::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->orderBy('name')->get();
     }
 
     public function getDepartments(Request $request)
     {
-        return Departments::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->get();
+        return Departments::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->orderBy('name')->get();
     }
 
     public function getCompanies(Request $request)
     {
-        return Company::where('name', 'LIKE', $request->search.'%')->distinct('name')->select('id', 'name')->get();
+        return Company::select('name')
+                        ->where('name', 'LIKE', $request->search.'%')
+                        ->groupBy('name')
+                        ->orderBy('name')
+                        ->get();
     }
 
     public function getCities(Request $request)
     {
-        return Cities::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->get();
+        return Cities::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->orderBy('name')->get();
     }
 
     public function getStates(Request $request)
     {
-        return States::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->get();
+        return States::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->orderBy('name')->get();
     }
 
     public function getCountries(Request $request)
     {
-        return Countries::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->get();
+        return Countries::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->orderBy('name')->get();
     }
 
     public function getIndustries(Request $request)
     {
-        return Industry::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->get();
+        return Industry::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->orderBy('name')->get();
     }
 
     public function getTechnologies(Request $request)
     {
-        return Technologies::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->get();
+        return Technologies::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->orderBy('name')->get();
     }
 }
