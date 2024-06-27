@@ -113,9 +113,10 @@ if ($filters) {
                 $toFunding = $filter;
                 break;
             case 'keywords':
-                $contacts->where(function($query) use ($filter) {
-                    foreach ((array) $filter as $value) {
-                        $query->orWhereIn('keywords', 'LIKE', '%' . $value . '%');
+                $keywords = explode(',', $filter);
+                $contacts->where(function($query) use ($keywords) {
+                    foreach ($keywords as $value) {
+                        $query->orWhere('keywords', 'LIKE', '%' . trim($value) . '%');
                     }
                 });
                 break;
