@@ -437,19 +437,45 @@
         let selectedFilters = {}
 
         $('.input').on('keyup', /*debounce(*/function(e) {
-            let value = $(this).val();
-            let type  = $(this).attr('input-filter');
-            selectedFilters[type] = value;
-            console.log(selectedFilters);
-            // initDatatable(selectedFilters)
+            let value = $(this).val().trim(); // Trim whitespace
+            if (value !== '') {
+                let value = $(this).val();
+                let type  = $(this).attr('input-filter');
+                selectedFilters[type] = value;
+                console.log(selectedFilters);
+                // initDatatable(selectedFilters)
+            } else {
+                if (value.length <= 0) {
+                    let value = $(this).val();
+                    let type  = $(this).attr('input-filter');
+                    console.log(selectedFilters[type]);
+                    console.log(value.length);
+                    delete selectedFilters[type];
+                    console.log(value.length);
+                    // initDatatable(selectedFilters); // Uncomment this line if needed
+                }
+            }
         })/*, 400)*/;
 
         $('.filter').on('select2:select', function(e) {
             let value = $(this).val();
-            let type  = $(this).attr('data-filter');
-            selectedFilters[type] = value;
-            console.log(selectedFilters);
-            // initDatatable(selectedFilters)
+            if (value !== null && value.length > 0) {
+                let value = $(this).val();
+                let type  = $(this).attr('data-filter');
+                selectedFilters[type] = value;
+                console.log(selectedFilters);
+                // initDatatable(selectedFilters)
+            } else {
+                if (value.length <= 0) {
+                    let value = $(this).val();
+                    let type  = $(this).attr('input-filter');
+                    console.log(selectedFilters[type]);
+                    console.log(value.length);
+                    delete selectedFilters[type];
+                    console.log(value.length);
+                    // initDatatable(selectedFilters); // Uncomment this line if needed
+                }
+            }
         });
 
 
