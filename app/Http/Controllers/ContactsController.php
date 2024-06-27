@@ -112,7 +112,20 @@ if ($filters) {
             case 'to_funding':
                 $toFunding = $filter;
                 break;
-            // Add handling for 'keywords' and 'technologies' if necessary
+            case 'keywords':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->orWhereIn('keywords', 'LIKE', '%' . $value . '%');
+                    }
+                });
+                break;
+            case 'technologies':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->orWhere('technologies', 'LIKE', '%' . $value . '%');
+                    }
+                });
+                break;
         }
     }
 
