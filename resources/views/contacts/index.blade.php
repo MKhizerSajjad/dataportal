@@ -457,26 +457,39 @@
             }
         })/*, 400)*/;
 
-        $('.filter').on('select2:select', function(e) {
+        $('.filter').on('select2:select select2:unselect', function(e) {
             let value = $(this).val();
+            let type = $(this).attr('data-filter');
+
             if (value !== null && value.length > 0) {
-                let value = $(this).val();
-                let type  = $(this).attr('data-filter');
                 selectedFilters[type] = value;
-                console.log(selectedFilters);
-                // initDatatable(selectedFilters)
             } else {
-                if (value.length <= 0) {
-                    let value = $(this).val();
-                    let type  = $(this).attr('input-filter');
-                    console.log(selectedFilters[type]);
-                    console.log(value.length);
-                    delete selectedFilters[type];
-                    console.log(value.length);
-                    // initDatatable(selectedFilters); // Uncomment this line if needed
-                }
+                delete selectedFilters[type];
             }
+
+            console.log(selectedFilters);
         });
+
+        // $('.filter').on('select2:select', function(e) {
+        //     let value = $(this).val();
+        //     if (value !== null && value.length > 0) {
+        //         let value = $(this).val();
+        //         let type  = $(this).attr('data-filter');
+        //         selectedFilters[type] = value;
+        //         console.log(selectedFilters);
+        //         // initDatatable(selectedFilters)
+        //     } else {
+        //         if (value.length <= 0) {
+        //             let value = $(this).val();
+        //             let type  = $(this).attr('data-filter');
+        //             console.log(selectedFilters[type]);
+        //             console.log(value.length);
+        //             delete selectedFilters[type];
+        //             console.log(value.length);
+        //             // initDatatable(selectedFilters); // Uncomment this line if needed
+        //         }
+        //     }
+        // });
 
 
         $(document).on('click','#apply-filter',function(e) {
