@@ -149,9 +149,17 @@ if ($filters) {
     }
 
     // Additional where clauses for range filters
-    $contacts->whereBetween('employees', [$fromEmployees ?? 0, $toEmployees ?? 1000000]);
-    $contacts->whereBetween('annual_revenue', [$fromRevenue ?? 0, $toRevenue ?? 10000000000]);
-    $contacts->whereBetween('latest_funding', [$fromFunding ?? 0, $toFunding ?? 10000000000]);
+    if(isset($fromEmployees) || isset($toEmployees)) {
+        $contacts->whereBetween('employees', [$fromEmployees ?? 0, $toEmployees ?? 1000000]);
+    }
+
+    if(isset($fromRevenue) || isset($toRevenue)) {
+        $contacts->whereBetween('annual_revenue', [$fromRevenue ?? 0, $toRevenue ?? 10000000000]);
+    }
+
+    if(isset($fromFunding) || isset($toFunding)) {
+        $contacts->whereBetween('latest_funding', [$fromFunding ?? 0, $toFunding ?? 10000000000]);
+    }
 }
 
 $totalFiltered = clone $contacts;
