@@ -73,7 +73,19 @@ if ($filters) {
                 });
                 break;
             case 'seniority':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->orWhere('seniority', 'LIKE', '%' . $value . '%');
+                    }
+                });
+                break;
             case 'departments':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->orWhere('departments', 'LIKE', '%' . $value . '%');
+                    }
+                });
+                break;
             case 'company':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
@@ -88,6 +100,12 @@ if ($filters) {
             case 'state':
             case 'country':
             case 'industry':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->orWhere('industry', 'LIKE', '%' . $value . '%');
+                    }
+                });
+                break;
             case 'email_status':
                 $contacts->whereIn($key, (array) $filter);
                 break;
