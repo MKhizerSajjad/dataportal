@@ -65,62 +65,133 @@ if ($filters) {
                     $query->Where('last_name', 'LIKE', '%' . $filter . '%');
                 });
                 break;
+
             case 'title':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $words = explode(' ', $value);
+                        // Build the query to find titles containing all words
                         foreach ($words as $word) {
-                            $query->orWhere('title', 'LIKE', '%' . $word . '%');
+                            // Ensure each word is present in the title
+                            $query->where('title', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
                 break;
+            // case 'title':
+            //     $contacts->where(function($query) use ($filter) {
+            //         foreach ((array) $filter as $value) {
+            //             $words = explode(' ', $value);
+            //             $normalized = '%' . implode('%', $words) . '%';
+
+            //             // Build the OR condition for each possible permutation
+            //             foreach ($words as $word) {
+            //                 $query->orWhere('title', 'LIKE', '%' . $word . '%');
+            //             }
+
+            //             // Allow different word order and additional strings
+            //             $query->orWhere('title', 'LIKE', $normalized);
+            //         }
+            //     });
+            //     break;
+
             case 'seniority':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $words = explode(' ', $value);
+                        // Build the query to find seniority containing all words
                         foreach ($words as $word) {
-                            $query->orWhere('seniority', 'LIKE', '%' . $word . '%');
+                            // Ensure each word is present in the seniority
+                            $query->where('seniority', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
                 break;
+            // case 'seniority':
+            //     $contacts->where(function($query) use ($filter) {
+            //         foreach ((array) $filter as $value) {
+            //             $words = explode(' ', $value);
+            //             foreach ($words as $word) {
+            //                 $query->orWhere('seniority', 'LIKE', '%' . $word . '%');
+            //             }
+            //         }
+            //     });
+            //     break;
+
             case 'departments':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $words = explode(' ', $value);
+                        // Build the query to find departments containing all words
                         foreach ($words as $word) {
-                            $query->orWhere('departments', 'LIKE', '%' . $word . '%');
+                            // Ensure each word is present in the departments
+                            $query->where('departments', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
                 break;
+            // case 'departments':
+            //     $contacts->where(function($query) use ($filter) {
+            //         foreach ((array) $filter as $value) {
+            //             $words = explode(' ', $value);
+            //             foreach ($words as $word) {
+            //                 $query->orWhere('departments', 'LIKE', '%' . $word . '%');
+            //             }
+            //         }
+            //     });
+            //     break;
+
             case 'company':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $words = explode(' ', $value);
+                        // Build the query to find company containing all words
                         foreach ($words as $word) {
-                            $query->orWhere('company', 'LIKE', '%' . $word . '%');
+                            // Ensure each word is present in the company
+                            $query->where('company', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
                 break;
+            // case 'company':
+            //     $contacts->where(function($query) use ($filter) {
+            //         foreach ((array) $filter as $value) {
+            //             $words = explode(' ', $value);
+            //             foreach ($words as $word) {
+            //                 $query->orWhere('company', 'LIKE', '%' . $word . '%');
+            //             }
+            //         }
+            //     });
+            //     break;
             case 'company_city':
             case 'company_state':
             case 'company_country':
             case 'city':
             case 'state':
             case 'country':
+
             case 'industry':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $words = explode(' ', $value);
+                        // Build the query to find industry containing all words
                         foreach ($words as $word) {
-                            $query->orWhere('industry', 'LIKE', '%' . $word . '%');
+                            // Ensure each word is present in the industry
+                            $query->where('industry', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
                 break;
+            // case 'industry':
+            //     $contacts->where(function($query) use ($filter) {
+            //         foreach ((array) $filter as $value) {
+            //             $words = explode(' ', $value);
+            //             foreach ($words as $word) {
+            //                 $query->orWhere('industry', 'LIKE', '%' . $word . '%');
+            //             }
+            //         }
+            //     });
+            //     break;
             case 'email_status':
                 $contacts->whereIn($key, (array) $filter);
                 break;
@@ -156,16 +227,30 @@ if ($filters) {
                     }
                 });
                 break;
+
+
             case 'technologies':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $words = explode(' ', $value);
+                        // Build the query to find technologies containing all words
                         foreach ($words as $word) {
-                            $query->orWhere('technologies', 'LIKE', '%' . $word . '%');
+                            // Ensure each word is present in the technologies
+                            $query->where('technologies', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
                 break;
+            // case 'technologies':
+            //     $contacts->where(function($query) use ($filter) {
+            //         foreach ((array) $filter as $value) {
+            //             $words = explode(' ', $value);
+            //             foreach ($words as $word) {
+            //                 $query->orWhere('technologies', 'LIKE', '%' . $word . '%');
+            //             }
+            //         }
+            //     });
+            //     break;
         }
     }
 
