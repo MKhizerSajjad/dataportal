@@ -122,24 +122,13 @@ if ($filters) {
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $words = explode(' ', $value);
-                        // Build the query to find departments containing all words
                         foreach ($words as $word) {
-                            // Ensure each word is present in the departments
-                            $query->where('departments', 'LIKE', '%' . $word . '%');
+                            $query->orWhere('departments', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
                 break;
-            // case 'departments':
-            //     $contacts->where(function($query) use ($filter) {
-            //         foreach ((array) $filter as $value) {
-            //             $words = explode(' ', $value);
-            //             foreach ($words as $word) {
-            //                 $query->orWhere('departments', 'LIKE', '%' . $word . '%');
-            //             }
-            //         }
-            //     });
-            //     break;
+
 
             case 'company':
                 $contacts->where(function($query) use ($filter) {
@@ -148,7 +137,7 @@ if ($filters) {
                         // Build the query to find company containing all words
                         foreach ($words as $word) {
                             // Ensure each word is present in the company
-                            $query->where('company', 'LIKE', '%' . $word . '%');
+                            $query->where('company', 'LIKE', $word);
                         }
                     }
                 });
