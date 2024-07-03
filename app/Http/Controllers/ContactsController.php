@@ -98,12 +98,7 @@ if ($filters) {
             case 'seniority':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $words = explode(' ', $value);
-                        // Build the query to find seniority containing all words
-                        foreach ($words as $word) {
-                            // Ensure each word is present in the seniority
-                            $query->where('seniority', 'LIKE', '%' . $word . '%');
-                        }
+                        $query->where('seniority', 'LIKE', $value);
                     }
                 });
                 break;
@@ -121,24 +116,15 @@ if ($filters) {
             case 'departments':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $words = explode(' ', $value);
-                        foreach ($words as $word) {
-                            $query->orWhere('departments', 'LIKE', '%' . $word . '%');
-                        }
+                        $query->orWhere('departments', 'LIKE', $value);
                     }
                 });
                 break;
 
-
             case 'company':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $words = explode(' ', $value);
-                        // Build the query to find company containing all words
-                        foreach ($words as $word) {
-                            // Ensure each word is present in the company
-                            $query->where('company', 'LIKE', $word);
-                        }
+                        $query->where('company', 'LIKE', $value);
                     }
                 });
                 break;
@@ -209,24 +195,15 @@ if ($filters) {
                 $keywords = explode(',', $filter);
                 $contacts->where(function($query) use ($keywords) {
                     foreach ($keywords as $value) {
-                        $words = explode(' ', $value);
-                        foreach ($words as $word) {
-                            $query->orWhere('keywords', 'LIKE', '%' . $word . '%');
-                        }
+                        $query->orWhere('keywords', 'LIKE', '%' . $value . '%');
                     }
                 });
                 break;
 
-
             case 'technologies':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $words = explode(' ', $value);
-                        // Build the query to find technologies containing all words
-                        foreach ($words as $word) {
-                            // Ensure each word is present in the technologies
-                            $query->where('technologies', 'LIKE', '%' . $word . '%');
-                        }
+                        $query->where('technologies', 'LIKE', $value);
                     }
                 });
                 break;
