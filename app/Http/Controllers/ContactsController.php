@@ -139,11 +139,47 @@ if ($filters) {
             //     });
             //     break;
             case 'company_city':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->where('company_city', 'LIKE', $value);
+                    }
+                });
+                break;
             case 'company_state':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->where('company_state', 'LIKE', $value);
+                    }
+                });
+                break;
             case 'company_country':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->where('company_country', 'LIKE', $value);
+                    }
+                });
+                break;
             case 'city':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->where('city', 'LIKE', $value);
+                    }
+                });
+                break;
             case 'state':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->where('state', 'LIKE', $value);
+                    }
+                });
+                break;
             case 'country':
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->where('country', 'LIKE', $value);
+                    }
+                });
+                break;
 
             case 'industry':
                 $contacts->where(function($query) use ($filter) {
