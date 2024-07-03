@@ -113,10 +113,10 @@ if ($filters) {
             //     });
             //     break;
 
-            case 'departments':
+            case 'department':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->orWhere('departments', 'LIKE', $value);
+                        $query->Where('departments', 'LIKE', $value);
                     }
                 });
                 break;
