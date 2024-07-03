@@ -346,7 +346,16 @@
     </div>
 @endsection
 
-
+<style>
+    div.dataTables_wrapper div.dataTables_processing {
+        top: 20px;
+        bottom: 20px;
+        width: auto;
+        margin: 0;
+        color: red;
+        transform: translateX(-50%);
+    }
+</style>
 @push('script')
 <script src="https://cdn.jsdelivr.net/npm/debounce@2.1.0/index.min.js"></script>
 <script>
@@ -560,6 +569,9 @@
             pageLength: 10,
             searching: false,
             order: [[0, "desc"]],
+            language: {
+                processing: 'Loading...'
+            },
             ajax: {
                 "url": "{{ route('contacts.data') }}",
                 "type": "POST",
@@ -612,6 +624,9 @@
             searching: false,
             pageLength: 10,
             order: [[0, "desc"]],
+            language: {
+                processing: 'Loading...'
+            },
             ajax: {
                 "url": "{{ route('contacts.data') }}",
                 "type": "POST",
