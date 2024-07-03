@@ -349,11 +349,10 @@
 <style>
     div.dataTables_wrapper div.dataTables_processing {
         top: 20px;
-        bottom: 20px;
-        width: auto;
-        margin: 0;
+        bottom: 50px;
         color: red;
-        transform: translateX(-50%);
+        font-weight: bold;
+        font-size: 16px;
     }
 </style>
 @push('script')
