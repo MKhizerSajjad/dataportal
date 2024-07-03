@@ -25,6 +25,12 @@ class ContactsController extends Controller
         ];
         return view('contacts.index');
     }
+
+    public function removeFormatt($value) {
+        $plainNumber = str_replace(',', '', $value);
+        return (int) $plainNumber;
+    }
+
     public function data(Request $request)
     {
         $columns = array(
@@ -210,22 +216,22 @@ if ($filters) {
                 $contacts->whereNotIn('company', (array) $filter);
                 break;
             case 'from_employees':
-                $fromEmployees = $filter;
+                $fromEmployees = $this->removeFormatt($filter);
                 break;
             case 'to_employees':
-                $toEmployees = $filter;
+                $toEmployees = $this->removeFormatt($filter);
                 break;
             case 'from_revenue':
-                $fromRevenue = $filter;
+                $fromRevenue = $this->removeFormatt($filter);
                 break;
             case 'to_revenue':
-                $toRevenue = $filter;
+                $toRevenue = $this->removeFormatt($filter);
                 break;
             case 'from_funding':
-                $fromFunding = $filter;
+                $fromFunding = $this->removeFormatt($filter);
                 break;
             case 'to_funding':
-                $toFunding = $filter;
+                $toFunding = $this->removeFormatt($filter);
                 break;
             case 'keywords':
                 $keywords = explode(',', $filter);
@@ -266,7 +272,7 @@ if ($filters) {
     }
 
     if(isset($fromFunding) || isset($toFunding)) {
-        $contacts->whereBetween('latest_funding', [$fromFunding ?? 0, $toFunding ?? 10000000000]);
+        $contacts->whereBetween('total_funding', [$fromFunding ?? 0, $toFunding ?? 10000000000]);
     }
 }
 
