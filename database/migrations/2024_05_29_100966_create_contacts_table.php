@@ -26,6 +26,7 @@ return new class extends Migration
 
             $table->bigInteger('title_id')->nullable()->unsigned();
             $table->bigInteger('seniority_id')->nullable()->unsigned();
+            $table->bigInteger('company_id')->nullable()->unsigned();
             // $table->string('departments')->nullable();
             $table->string('contact_owner')->nullable();
             $table->string('first_phone')->nullable()->index();
@@ -114,6 +115,7 @@ return new class extends Migration
 
             $table->foreign('title_id')->references('id')->on('title')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('seniority_id')->references('id')->on('seniority')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('company_id')->references('id')->on('company')->onUpdate('CASCADE')->onDelete('CASCADE');
 
         });
     }

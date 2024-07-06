@@ -178,14 +178,15 @@ class ProcessContactJob implements ShouldQueue
             [
                 'first_name' => $contact['first_name'],
                 // 'email' => $contact[5],
-                'mobile_phone' => $contact['mobile_phone']
+                'mobile_phone' => $contact['mobile_phone'],
+                'title_id' => $title->id ?? null,
+                'seniority_id' => $seniority->id ?? null,
+                'company_id' => $companyId ?? null,
             ],
             [
                 'status' => 1,
                 'first_name' => $contact['first_name'] ?? '***',
                 'last_name' => $contact['last_name'] ?? 'NULL',
-                'title_id' => $title->id ?? null,
-                'seniority_id' => $seniority->id ?? null,
                 'contact_owner'         => $contact['contact_owner'],
                 'first_phone'           => $contact['first_phone'],
                 'work_direct_phone'     => $contact['work_direct_phone'],
