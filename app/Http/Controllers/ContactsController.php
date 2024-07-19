@@ -292,7 +292,7 @@ if ($filters) {
             case 'technologies':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->orWwhere('technologies', 'LIKE', $value);
+                        $query->orWhere('technologies', 'LIKE', $value);
                     }
                 });
                 break;
