@@ -281,7 +281,6 @@ if ($filters) {
                 break;
 
             case 'funding-cats':
-                logger(json_encode($filter));
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $query->orWhere('latest_funding', 'LIKE', $value);
@@ -289,23 +288,23 @@ if ($filters) {
                 });
                 break;
 
-            // case 'technologies':
-            //     $contacts->where(function($query) use ($filter) {
-            //         foreach ((array) $filter as $value) {
-            //             $query->orWhere('technologies', 'LIKE', $value);
-            //         }
-            //     });
-            //     break;
             case 'technologies':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $words = explode(' ', $value);
-                        foreach ($words as $word) {
-                            $query->orWhere('technologies', 'LIKE', '%' . $word . '%');
-                        }
+                        $query->orWhereIn('technologies', [$value]);
                     }
                 });
                 break;
+            // case 'technologies':
+            //     $contacts->where(function($query) use ($filter) {
+            //         foreach ((array) $filter as $value) {
+            //             $words = explode(' ', $value);
+            //             foreach ($words as $word) {
+            //                 $query->orWhere('technologies', 'LIKE', '%' . $word . '%');
+            //             }
+            //         }
+            //     });
+            //     break;
         }
     }
 
