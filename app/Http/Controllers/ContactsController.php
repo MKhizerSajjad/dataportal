@@ -72,35 +72,77 @@ if ($filters) {
                 });
                 break;
 
-            case 'title':
-                $contacts->where(function($query) use ($filter) {
-                    foreach ((array) $filter as $value) {
-                        $words = explode(' ', $value);
-                        // Build the query to find titles containing all words
-                        foreach ($words as $word) {
-                            // Ensure each word is present in the title
-                            $query->where('title', 'LIKE', '%' . $word . '%');
+                case 'title':
+                    // $contacts->where(function($query) use ($filter) {
+                    //     foreach ((array) $filter as $value) {
+                    //         $words = explode(' ', $value);
+                    //         // Build the query to find titles containing all words
+                    //         foreach ($words as $word) {
+                    //             // Ensure each word is present in the title
+                    //             $query->where('title', 'LIKE', '%' . $word . '%');
+                    //         }
+                    //     }
+                    // });
+                    // break;
+                    $contacts->where(function($query) use ($filter) {
+                        $titleMappings = [
+                            'CEO' => ['CEO', 'Chief Executive Officer'],
+                            'CSO' => ['CSO', 'Chief Sales Officer'],
+                            'CRO' => ['CRO', 'Chief Revenue Officer'],
+                            'CCO' => ['CCO', 'Chief Commercial Officer'],
+                            'Chief Operating Officer' => ['Chief Operating Officer', 'COO'],
+                            'Managing Director' => ['Managing Director', 'MD'],
+                            'VP Sales' => ['VP Sales', 'Vice President Sales'],
+                            'Chief Marketing Officer' => ['Chief Marketing Officer', 'CMO'],
+                            'CIO' => ['CIO', 'Chief Information Officer'],
+                            'Chief Technology Officer' => ['Chief Technology Officer', 'CTO']
+                        ];
+
+                        foreach ((array) $filter as $value) {
+                            // Check if the word exists in the mappings
+                            $matchedTitles = [];
+                            foreach ($titleMappings as $key => $synonyms) {
+                                if (in_array($value, $synonyms)) {
+                                    $matchedTitles = $synonyms;
+                                }
+                            }
+
+                            if (!empty($matchedTitles)) {
+                                // Build OR condition for matched titles
+                                // $orQueries[] = function ($q) use ($matchedTitles) {
+                                    foreach ($matchedTitles as $title) {
+                                        $query->orWhere('title', 'LIKE', '%' . $title . '%');
+                                        // logger('title : ' . $title);
+                                    }
+                                // };
+                            }
+
+                            $words = explode(' ', $value);
+                            $normalized = '%' . implode('%', $words) . '%';
+                            // Build the OR condition for each possible permutation
+                            foreach ($words as $word) {
+                                $query->where('title', 'LIKE', '%' . $word . '%');
+                            }
+                            // Allow different word order and additional strings
+                            $query->orWhere('title', 'LIKE', $normalized);
                         }
-                    }
-                });
-                break;
-            // case 'title':
-            //     $contacts->where(function($query) use ($filter) {
-            //         foreach ((array) $filter as $value) {
-            //             $words = explode(' ', $value);
-            //             $normalized = '%' . implode('%', $words) . '%';
+                    });
+                    // case 'title':
+                    //     $contacts->where(function($query) use ($filter) {
+                    //         foreach ((array) $filter as $value) {
+                    //             $words = explode(' ', $value);
+                    //             $normalized = '%' . implode('%', $words) . '%';
 
-            //             // Build the OR condition for each possible permutation
-            //             foreach ($words as $word) {
-            //                 $query->orWhere('title', 'LIKE', '%' . $word . '%');
-            //             }
+                    //             // Build the OR condition for each possible permutation
+                    //             foreach ($words as $word) {
+                    //                 $query->orWhere('title', 'LIKE', '%' . $word . '%');
+                    //             }
 
-            //             // Allow different word order and additional strings
-            //             $query->orWhere('title', 'LIKE', $normalized);
-            //         }
-            //     });
-            //     break;
-
+                    //             // Allow different word order and additional strings
+                    //             $query->orWhere('title', 'LIKE', $normalized);
+                    //         }
+                    //     });
+                    break;
             case 'seniority':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
@@ -130,7 +172,7 @@ if ($filters) {
             case 'company':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->where('company', 'LIKE', $value);
+                        $query->orWhere('company', 'LIKE', $value);
                     }
                 });
                 break;
@@ -657,4 +699,5 @@ $totalData = $totalFiltered;
 
         return back()->with('success','Contacts importing process is in queue now.');
     }
+
 }
