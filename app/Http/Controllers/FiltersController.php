@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Models\Contacts;
@@ -13,6 +14,7 @@ use App\Models\States;
 use App\Models\Countries;
 use App\Models\Industry;
 use App\Models\Keywords;
+use App\Models\CompanyFundings;
 use App\Models\Technologies;
 
 class FiltersController extends Controller
@@ -92,5 +94,17 @@ class FiltersController extends Controller
     public function getTechnologies(Request $request)
     {
         return Technologies::where('name', 'LIKE', '%'.$request->search.'%')->select('id', 'name')->orderBy('name')->limit(30)->get();
+    }
+
+    public function getFundingCats(Request $request)
+    {
+        return CompanyFundings::select(DB::raw('MIN(id) as id'), 'latest_funding as name')
+        ->where('latest_funding', 'LIKE', '%'.$request->search.'%')
+        ->whereNotNull('latest_funding')
+        ->orderByRaw("CASE WHEN name = 'other' THEN 1 ELSE 0 END")
+        ->orderBy('name')
+        ->groupBy('name')
+        ->limit(30)
+        ->get();
     }
 }

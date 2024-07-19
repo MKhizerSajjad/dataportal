@@ -241,14 +241,13 @@
                                     </div>
                                 </div>
 
-                                {{-- <div class="mb-3">
-                                    <label class="form-label mb-0">Lastest Funding Type</label>
-                                    <select name="latest_funding[]" data-filter="title" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        @foreach ($groupOptions['latest_funding'] as $latest_funding)
-                                            <option value="{{$latest_funding}}" @if(in_array($latest_funding, request()->input('latest_funding', []))) selected @endif>{{$latest_funding}}</option>
-                                        @endforeach
+
+
+                                <div class="mb-3">
+                                    <label class="form-label mb-0">Funding Catory</label>
+                                    <select name="funding-cats[]" id="funding-cats" data-filter="funding-cats" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
                                     </select>
-                                </div> --}}
+                                </div>
 
                                 <div class="mb-3">
                                     <label class="form-label mb-0">Email Status</label>
@@ -406,6 +405,7 @@
         initializeSelect2('company_country', "{{ route('countries') }}", 'Choose ...', 3);
         initializeSelect2('industry', "{{ route('industries') }}", 'Choose ...', 3);
         initializeSelect2('technologies', "{{ route('technologies') }}", 'Choose ...', 3);
+        initializeSelect2('funding-cats', "{{ route('funding-cats') }}", 'Choose ...', null);
 
         function initializeSelect2(elementId, routeName, placeholderText, minSearchLimit) {
             $('#' + elementId).select2({

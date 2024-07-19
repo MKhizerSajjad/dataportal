@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/countries', [FiltersController::class, 'getCountries'])->name('countries');
     Route::get('/industries', [FiltersController::class, 'getIndustries'])->name('industries');
     Route::get('/technologies', [FiltersController::class, 'getTechnologies'])->name('technologies');
+    Route::get('/funding-cats', [FiltersController::class, 'getFundingCats'])->name('funding-cats');
 
 });
 

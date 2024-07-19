@@ -97,7 +97,7 @@ if ($filters) {
                             'CIO' => ['CIO', 'Chief Information Officer'],
                             'Chief Technology Officer' => ['Chief Technology Officer', 'CTO']
                         ];
-                        
+
                         foreach ((array) $filter as $value) {
                             // Check if the word exists in the mappings
                             $matchedTitles = [];
@@ -185,42 +185,42 @@ if ($filters) {
             case 'company_city':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->where('company_city', 'LIKE', $value);
+                        $query->orWhere('company_city', 'LIKE', $value);
                     }
                 });
                 break;
             case 'company_state':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->where('company_state', 'LIKE', $value);
+                        $query->orWhere('company_state', 'LIKE', $value);
                     }
                 });
                 break;
             case 'company_country':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->where('company_country', 'LIKE', $value);
+                        $query->orWhere('company_country', 'LIKE', $value);
                     }
                 });
                 break;
             case 'city':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->where('city', 'LIKE', $value);
+                        $query->orWhere('city', 'LIKE', $value);
                     }
                 });
                 break;
             case 'state':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->where('state', 'LIKE', $value);
+                        $query->orWhere('state', 'LIKE', $value);
                     }
                 });
                 break;
             case 'country':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->where('country', 'LIKE', $value);
+                        $query->orWhere('country', 'LIKE', $value);
                     }
                 });
                 break;
@@ -232,7 +232,7 @@ if ($filters) {
                         // Build the query to find industry containing all words
                         foreach ($words as $word) {
                             // Ensure each word is present in the industry
-                            $query->where('industry', 'LIKE', '%' . $word . '%');
+                            $query->orWhere('industry', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
@@ -280,10 +280,19 @@ if ($filters) {
                 });
                 break;
 
+            case 'funding-cats':
+                logger(json_encode($filter));
+                $contacts->where(function($query) use ($filter) {
+                    foreach ((array) $filter as $value) {
+                        $query->orWhere('latest_funding', 'LIKE', $value);
+                    }
+                });
+                break;
+
             case 'technologies':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
-                        $query->where('technologies', 'LIKE', $value);
+                        $query->orWwhere('technologies', 'LIKE', $value);
                     }
                 });
                 break;
