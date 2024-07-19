@@ -97,7 +97,7 @@ if ($filters) {
                             'CIO' => ['CIO', 'Chief Information Officer'],
                             'Chief Technology Officer' => ['Chief Technology Officer', 'CTO']
                         ];
-    
+                        
                         foreach ((array) $filter as $value) {
                             // Check if the word exists in the mappings
                             $matchedTitles = [];
@@ -106,7 +106,6 @@ if ($filters) {
                                     $matchedTitles = $synonyms;
                                 }
                             }
-    
                             if (!empty($matchedTitles)) {
                                 // Build OR condition for matched titles
                                 // $orQueries[] = function ($q) use ($matchedTitles) {
@@ -116,7 +115,6 @@ if ($filters) {
                                     }
                                 // };
                             }
-    
                             $words = explode(' ', $value);
                             $normalized = '%' . implode('%', $words) . '%';
                             // Build the OR condition for each possible permutation
@@ -132,12 +130,10 @@ if ($filters) {
                     //         foreach ((array) $filter as $value) {
                     //             $words = explode(' ', $value);
                     //             $normalized = '%' . implode('%', $words) . '%';
-    
                     //             // Build the OR condition for each possible permutation
                     //             foreach ($words as $word) {
                     //                 $query->orWhere('title', 'LIKE', '%' . $word . '%');
                     //             }
-    
                     //             // Allow different word order and additional strings
                     //             $query->orWhere('title', 'LIKE', $normalized);
                     //         }
@@ -699,5 +695,4 @@ $totalData = $totalFiltered;
 
         return back()->with('success','Contacts importing process is in queue now.');
     }
-    
 }
