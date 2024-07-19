@@ -377,11 +377,15 @@
                 // Parse the number from the input (handle "lac" and other abbreviations)
                 let parsedNumber = parseFloat(numberValue);
 
-                // Format the parsed number with commas
-                let formattedValue = parsedNumber.toLocaleString('en-US');
+                // Check if the parsed number is a valid number
+                if (!isNaN(parsedNumber)) {
+                    // Format the parsed number with commas
+                    let formattedValue = parsedNumber.toLocaleString('en-US');
 
-                // Update the input field with the formatted value
-                $(this).val(formattedValue);
+                    // Update the input field with the formatted value
+                    $(this).val(formattedValue);
+                }
+                // If parsing fails, do nothing (leave the input unchanged)
             });
         }
         // Call formatNumberInput function for all elements with class 'number-input'
