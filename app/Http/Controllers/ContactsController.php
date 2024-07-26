@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use ZipArchive;
 use Carbon\Carbon;
 use App\Models\Contacts;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Jobs\ProcessContactsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\TextUI\XmlConfiguration\Logging\Logging;
 
 class ContactsController extends Controller
 {
@@ -638,8 +640,80 @@ $totalData = $totalFiltered;
     {
 
         try {
+            $filters = $request->all();
+            $chunkSize = 1000;
+            $offset =null;
+            $limit = null;
+            $contacts = new ContactsExport($filters, $offset, $limit);
+
+            $totalContacts = $contacts->queryCount(); // Get total count of records
+
+            logger("Total Counts" . $totalContacts);
+            $numChunks = ceil($totalContacts / $chunkSize); // Calculate number of chunks
+
+            logger("Chunks : " .$numChunks);
+
+            $filePaths = [];
+
+            for ($i = 0; $i < $numChunks; $i++) {
+                $fileName = 'contacts-' . Carbon::now()->timestamp . '-' . ($i + 1) . '.csv'; // Unique filename
+                $filePath = 'exports/' . $fileName;
+
+                // Excel::store($contacts, $filePath);
+                $chunkedContacts = new ContactsExport($request->all(), $i * $chunkSize, $chunkSize);
+                Excel::store($chunkedContacts, $filePath);
+                $filePaths[] = 'storage/' . $filePath;
+                $files[] =$fileName;
+                // return 'storage/' . $filePath;
+            }
+            logger($filePaths);
+            // Temporary zip file path
+            $zipFileName = 'downloads.zip';
+            $zipFilePath = storage_path('app/public/exports/' . $zipFileName);
+
+            logger('ZIP::::::: '. $zipFilePath);
+
+            // Create a new ZipArchive instance
+            $zip = new ZipArchive;
+
+            // Create the zip file
+            if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
+                foreach ($files as $file) {
+                    if ($file) {
+                        $fileName = basename($file);
+                        $zip->addFile(public_path('storage/exports/' . $file), $fileName);
+                        // $zip->addFile(storage_path('app/public/exports/' . $file), $fileName);
+                        // logger(storage_path('storage/exports/' . $file));
+                        logger(public_path('storage/exports/' . $file));
+
+                    }
+                }
+                $zip->close();
+            }
+
+            // Return the zip file as a download response
+
+            // Temporary zip file path
+            $zipFileName = 'downloads.zip';
+            $zipFilePath = public_path('storage/exports/' . $zipFileName);
+            logger('ZIP::::::: '. public_path('storage/exports/' . $zipFileName));
+
+            return $filePath;
+            return response()->download($zipFilePath);
+            return response()->download(public_path('storage/exports/'.$zipFileName));
+            // return 'storage/app/public/exports/' . $zipFileName;
+            // ->deleteFileAfterSend(true);
+
+            // return response()->download($filePaths); // Return array of file paths
+
+
+
+
+
+
+
             // get all filtered contacts
-            $contacts = new ContactsExport($request->all());
+            $contacts = new ContactsExport($request->all(), null, null);
 
 
             $fileName = 'contacts-'. Carbon::now()->timestamp .'.csv';
