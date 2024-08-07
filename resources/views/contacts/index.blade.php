@@ -545,19 +545,20 @@
                     _token: "{{ csrf_token() }}",
                     filter:selectedFilters
                 },
-        success: function(response) {
-            // console.log(response)
+                success: function(response) {
+                    console.log('response--------------------------------------');
+                    console.log(response)
 
-            var appUrl = "{{ config('app.url') }}";
-            $('#export-excel').attr('href', appUrl + response);
-            $('#export-excel')[0].click();
-            // Create a hidden anchor element
+                    // var appUrl = "{{ config('app.url') }}";
+                    $('#export-excel').attr('href', response);
+                    $('#export-excel')[0].click();
+                    // Create a hidden anchor element
 
-            // document.body.removeChild(a); // Clean up
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
+                    // document.body.removeChild(a); // Clean up
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
             });
 
         });
