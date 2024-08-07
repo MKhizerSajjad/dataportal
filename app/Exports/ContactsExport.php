@@ -24,19 +24,10 @@ class ContactsExport implements FromCollection
     */
     public function collection()
     {
-        logger('in?????');
-        // logger($this->filters);
-
         $contacts = Contacts::query();
-        if(isset($this->filters)){
-            $contacts = Contacts::query();
-
-            $fromEmployees = 0;
-            $toEmployees = 1000000;
-            $fromRevenue = 0;
-            $toRevenue = 10000000000;
-            $fromFunding = 0;
-            $toFunding = 10000000000;
+        logger("COUNT ALL : " . $contacts->count());
+        // logger("Filterss ALL : " . json_encode($this->filters));
+        if(isset($this->filters)) {
             foreach ($this->filters as $key => $filter) {
                 if ($filter === null || $filter === '') {
                     continue; // Skip empty filters
@@ -457,6 +448,7 @@ class ContactsExport implements FromCollection
         // Apply filters (if needed)
         if (!empty($this->filters)) {
 
+            logger ('in queryCount');
             $contacts = Contacts::query();
 
             $fromEmployees = 0;
@@ -730,6 +722,7 @@ class ContactsExport implements FromCollection
             if(isset($fromFunding) || isset($toFunding)) {
                 $contacts->whereBetween('total_funding', [$fromFunding ?? 0, $toFunding ?? 10000000000]);
             }
+            logger ('in queryCount END : COUNT : ' . $contacts->count());
             return $contacts->count();
         }
 

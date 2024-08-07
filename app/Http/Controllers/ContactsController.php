@@ -640,13 +640,22 @@ $totalData = $totalFiltered;
     {
 
         try {
-            $filters = $request->all();
+            logger("in");
+            $userID = 'user-'.Auth()->id();
+            $filters = $request->all()['filter'];
             $chunkSize = 1000;
             $offset =null;
             $limit = null;
+            $files[] = '';
             $contacts = new ContactsExport($filters, $offset, $limit);
+            $contactsForChunk = clone $contacts;
+            logger('filters only : ' . json_encode($filters));
 
-            $totalContacts = $contacts->queryCount(); // Get total count of records
+            $data = $contacts->collection($filters, $offset, $limit);
+
+            // $totalContacts = $contacts->queryCount(); // Get total count of records
+            $totalContacts = count($data);
+            // $totalContacts = 2000;
 
             logger("Total Counts" . $totalContacts);
             $numChunks = ceil($totalContacts / $chunkSize); // Calculate number of chunks
@@ -655,21 +664,28 @@ $totalData = $totalFiltered;
 
             $filePaths = [];
 
+            $path = public_path('storage/exports/' . $userID);
+            exec("rm -rf {$path}/*");
+
             for ($i = 0; $i < $numChunks; $i++) {
                 $fileName = 'contacts-' . Carbon::now()->timestamp . '-' . ($i + 1) . '.csv'; // Unique filename
-                $filePath = 'exports/' . $fileName;
+                $filePath = 'exports/' . $userID .'/'. $fileName;
 
                 // Excel::store($contacts, $filePath);
-                $chunkedContacts = new ContactsExport($request->all(), $i * $chunkSize, $chunkSize);
+                $chunkedContacts = new ContactsExport($filters, $i * $chunkSize, $chunkSize);
+                // $chunkedContacts = $contactsForChunk->collection($filters, $i * $chunkSize, $chunkSize);
+                // logger(json_encode($chunkedContacts));
+                // logger('exit');
+                // exit();
                 Excel::store($chunkedContacts, $filePath);
                 $filePaths[] = 'storage/' . $filePath;
-                $files[] =$fileName;
+                $files[] = $fileName;
                 // return 'storage/' . $filePath;
             }
             logger($filePaths);
             // Temporary zip file path
             $zipFileName = 'downloads.zip';
-            $zipFilePath = storage_path('app/public/exports/' . $zipFileName);
+            $zipFilePath = storage_path('app/public/exports/' . $userID .'/'. $zipFileName);
 
             logger('ZIP::::::: '. $zipFilePath);
 
@@ -681,69 +697,25 @@ $totalData = $totalFiltered;
                 foreach ($files as $file) {
                     if ($file) {
                         $fileName = basename($file);
-                        $zip->addFile(public_path('storage/exports/' . $file), $fileName);
-                        // $zip->addFile(storage_path('app/public/exports/' . $file), $fileName);
-                        // logger(storage_path('storage/exports/' . $file));
-                        logger(public_path('storage/exports/' . $file));
-
+                        $zip->addFile(public_path('storage/exports/' . $userID .'/'. $file), $fileName);
+                        logger(public_path('storage/exports/' . $userID .'/'. $file));
                     }
                 }
                 $zip->close();
             }
 
             // Return the zip file as a download response
+            return asset('storage/exports/' . $userID .'/'. $zipFileName);
+
 
             // Temporary zip file path
             $zipFileName = 'downloads.zip';
-            $zipFilePath = public_path('storage/exports/' . $zipFileName);
+            $zipFilePath = public_path('storage/exports/files/' . $zipFileName);
             logger('ZIP::::::: '. public_path('storage/exports/' . $zipFileName));
 
             return $filePath;
             return response()->download($zipFilePath);
-            return response()->download(public_path('storage/exports/'.$zipFileName));
-            // return 'storage/app/public/exports/' . $zipFileName;
-            // ->deleteFileAfterSend(true);
 
-            // return response()->download($filePaths); // Return array of file paths
-
-
-
-
-
-
-
-            // get all filtered contacts
-            $contacts = new ContactsExport($request->all(), null, null);
-
-
-            $fileName = 'contacts-'. Carbon::now()->timestamp .'.csv';
-            $filePath = 'public/exports/'.$fileName;
-            Excel::store($contacts, $filePath);
-            // logger('PATH : ' . $filePath);
-
-
-            // $filePath = storage_path($filePath);
-            // logger('222' . $filePath);
-            // logger('3333'  . Storage::download($filePath));
-            // return Storage::download($filePath);
-            // logger('3333 --- '  . 'storage/app/exports/'.$fileName);
-            // return 'public/storage/exports/'.$fileName;
-            return 'storage/'.$filePath;
-                // return response()->json(['url' => Storage::url($filePath)]);
-
-            // if (Storage::exists($filePath)) {
-            //     // return 'storage/app/'.$filePath;
-            //     // return public_path('storage/app/'.$filePath);
-
-            //     // return response()->json(['url' => Storage::url($filePath)]);
-            //     // return Storage::download($filePath);
-            //     // return "storage/app/public/".$filePath;
-            //     logger('----------in--------------');
-            //     return $filePath;
-            //     // return response()->download(storage_path('app/'.$filePath))->deleteFileAfterSend(true);
-            // } else {
-            //     return redirect()->route('contacts.index')->with('Oops!','We got some error.');
-            // }
         } catch (\Exception $e) {
             // Log the error
             \Log::error('Error storing Excel file: ' . $e->getMessage());
