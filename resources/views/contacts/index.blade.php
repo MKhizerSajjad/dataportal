@@ -249,14 +249,14 @@
                                     </select>
                                 </div>
 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label class="form-label mb-0">Email Status</label>
                                     <select name="email_status[]" id="email_status" data-filter="email_status" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
-                                        {{-- @foreach (getEmailStatus() as $status)
+                                        @foreach (getEmailStatus() as $status)
                                             <option value="{{$status}}" @if(in_array($status, request()->input('email_status', []))) selected @endif>{{$status}}</option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
-                                </div>
+                                </div> --}}
                             </form>
                         </div>
                     </div>
