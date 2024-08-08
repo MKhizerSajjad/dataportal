@@ -5,8 +5,9 @@ namespace App\Exports;
 use App\Models\Contacts;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ContactsExport implements FromCollection
+class ContactsExport implements FromCollection, WithHeadings
 {
     protected $filters;
     protected $offset;
@@ -112,23 +113,23 @@ class ContactsExport implements FromCollection
                             //         }
                             //     });
                             break;
-                    case 'seniority':
-                        $contacts->where(function($query) use ($filter) {
-                            foreach ((array) $filter as $value) {
-                                $query->where('seniority', 'LIKE', $value);
-                            }
-                        });
-                        break;
-                    // case 'seniority':
-                    //     $contacts->where(function($query) use ($filter) {
-                    //         foreach ((array) $filter as $value) {
-                    //             $words = explode(' ', $value);
-                    //             foreach ($words as $word) {
-                    //                 $query->orWhere('seniority', 'LIKE', '%' . $word . '%');
-                    //             }
-                    //         }
-                    //     });
-                    //     break;
+                        case 'technologies':
+                            // $contacts->where(function($query) use ($filter) {
+                            //     foreach ((array) $filter as $value) {
+                            //         $query->orWhereIn('technologies', [$value]);
+                            //     }
+                            // });
+                            // break;
+                        // case 'technologies':
+                            $contacts->where(function($query) use ($filter) {
+                                foreach ((array) $filter as $value) {
+                                    $words = explode(' ', $value);
+                                    foreach ($words as $word) {
+                                        $query->Where('technologies', 'LIKE', '%' . $word . '%');
+                                    }
+                                }
+                            });
+                            break;
 
                     case 'department':
                         $contacts->where(function($query) use ($filter) {
@@ -262,18 +263,18 @@ class ContactsExport implements FromCollection
                         break;
 
                     case 'technologies':
-                        $contacts->where(function($query) use ($filter) {
-                            foreach ((array) $filter as $value) {
-                                $query->orWhereIn('technologies', [$value]);
-                            }
-                        });
-                        break;
+                        // $contacts->where(function($query) use ($filter) {
+                        //     foreach ((array) $filter as $value) {
+                        //         $query->orWhereIn('technologies', [$value]);
+                        //     }
+                        // });
+                        // break;
                     // case 'technologies':
                         $contacts->where(function($query) use ($filter) {
                             foreach ((array) $filter as $value) {
                                 $words = explode(' ', $value);
                                 foreach ($words as $word) {
-                                    $query->orWhere('technologies', 'LIKE', '%' . $word . '%');
+                                    $query->Where('technologies', 'LIKE', '%' . $word . '%');
                                 }
                             }
                         });
@@ -380,51 +381,51 @@ class ContactsExport implements FromCollection
     public function headings(): array
     {
         return [
-            // 'date',
-            // 'status',
-            'first_name',
-            'last_name',
-            'title',
-            'company',
-            'company_name_for_emails',
-            'email',
-            'email_status',
-            'email_confidence',
-            'seniority',
-            'departments',
-            'contact_owner',
-            'first_phone',
-            'work_direct_phone',
-            'home_phone',
-            'mobile_phone',
-            'corporate_phone',
-            'other_phone',
-            'stage',
-            'lists',
-            'last_contacted',
-            'account_owner',
-            'employees',
-            'industry',
-            'keywords',
-            'person_linkedin',
-            'website',
-            'company_linkedin_url',
-            'facebook_url',
-            'twitter_url',
-            'city',
-            'state',
-            'country',
-            'company_address',
-            'company_city',
-            'company_state',
-            'company_country',
-            'company_phone',
-            'seo_description',
-            'technologies',
-            'annual_revenue',
-            'total_funding',
-            'latest_funding',
-            'latest_funding_amount',
+            'Index',
+            'Status',
+            'First Name',
+            'Last Name',
+            'Title',
+            'Company',
+            'Company Name for Emails',
+            'Email',
+            'Email Status',
+            'Email Confidence',
+            'Seniority',
+            'Departments',
+            'Contact Owner',
+            'First Phone',
+            'Work Direct Phone',
+            'Home Phone',
+            'Mobile Phone',
+            'Corporate Phone',
+            'Other Phone',
+            'Stage',
+            'Lists',
+            'Last Contacted',
+            'Account Owner',
+            'Employees',
+            'Industry',
+            'Keywords',
+            'Person LinkedIn',
+            'Website',
+            'Company LinkedIn URL',
+            'Facebook URL',
+            'Twitter URL',
+            'City',
+            'State',
+            'Country',
+            'Company Address',
+            'Company City',
+            'Company State',
+            'Company Country',
+            'Company Phone',
+            'SEO Description',
+            'Technologies',
+            'Annual Revenue',
+            'Total Funding',
+            'Latest Funding',
+            'Latest Funding Amount',
             // 'last_raised_at',
             // 'email_sent',
             // 'email_open',
@@ -691,18 +692,18 @@ class ContactsExport implements FromCollection
                         break;
 
                     case 'technologies':
-                        $contacts->where(function($query) use ($filter) {
-                            foreach ((array) $filter as $value) {
-                                $query->orWhereIn('technologies', [$value]);
-                            }
-                        });
-                        break;
+                        // $contacts->where(function($query) use ($filter) {
+                        //     foreach ((array) $filter as $value) {
+                        //         $query->orWhereIn('technologies', [$value]);
+                        //     }
+                        // });
+                        // break;
                     // case 'technologies':
                         $contacts->where(function($query) use ($filter) {
                             foreach ((array) $filter as $value) {
                                 $words = explode(' ', $value);
                                 foreach ($words as $word) {
-                                    $query->orWhere('technologies', 'LIKE', '%' . $word . '%');
+                                    $query->Where('technologies', 'LIKE', '%' . $word . '%');
                                 }
                             }
                         });

@@ -291,18 +291,18 @@ if ($filters) {
                 break;
 
             case 'technologies':
-                $contacts->where(function($query) use ($filter) {
-                    foreach ((array) $filter as $value) {
-                        $query->orWhereIn('technologies', [$value]);
-                    }
-                });
-                break;
+                // $contacts->where(function($query) use ($filter) {
+                //     foreach ((array) $filter as $value) {
+                //         $query->orWhereIn('technologies', [$value]);
+                //     }
+                // });
+                // break;
             // case 'technologies':
                 $contacts->where(function($query) use ($filter) {
                     foreach ((array) $filter as $value) {
                         $words = explode(' ', $value);
                         foreach ($words as $word) {
-                            $query->orWhere('technologies', 'LIKE', '%' . $word . '%');
+                            $query->Where('technologies', 'LIKE', '%' . $word . '%');
                         }
                     }
                 });
