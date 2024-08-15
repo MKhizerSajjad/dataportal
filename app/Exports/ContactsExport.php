@@ -302,7 +302,12 @@ class ContactsExport implements FromCollection, WithHeadings
         } else {
             logger('offset');
             logger($this->offset .'------'.$this->limit);
-            return $contacts->offset($this->offset)->limit($this->limit)->get();
+            return $contacts->offset($this->offset)->limit($this->limit)
+                    ->select('id', 'status', 'first_name', 'last_name', 'title', 'company', 'company_name_for_emails', 'email', 'email_status', 'seniority', 'departments',
+                    'first_phone', 'work_direct_phone', 'home_phone', 'mobile_phone', 'corporate_phone', 'other_phone', 'employees', 'industry', 'keywords', 'person_linkedin',
+                    'website', 'company_linkedin_url', 'facebook_url', 'twitter_url', 'city', 'state', 'country', 'company_address', 'company_city', 'company_state', 'company_country',
+                    'company_phone', 'seo_description', 'technologies', 'annual_revenue', 'total_funding', 'latest_funding', 'latest_funding_amount')
+                    ->get();
         }
 
         // $contacts = $contacts->limit(25000)->get();
@@ -390,20 +395,20 @@ class ContactsExport implements FromCollection, WithHeadings
             'Company Name for Emails',
             'Email',
             'Email Status',
-            'Email Confidence',
+            // 'Email Confidence',
             'Seniority',
             'Departments',
-            'Contact Owner',
+            // 'Contact Owner',
             'First Phone',
             'Work Direct Phone',
             'Home Phone',
             'Mobile Phone',
             'Corporate Phone',
             'Other Phone',
-            'Stage',
-            'Lists',
-            'Last Contacted',
-            'Account Owner',
+            // 'Stage',
+            // 'Lists',
+            // 'Last Contacted',
+            // 'Account Owner',
             'Employees',
             'Industry',
             'Keywords',
