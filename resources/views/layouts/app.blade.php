@@ -35,7 +35,7 @@
                                 <div class="navbar-brand-box">
                                     <a href="{{route('dashboard')}}">
                                         <h3 class="text-light">
-                                            Data Portal
+                                            {{ config('app.name') }}
                                         </h3>
                                     </a>
                                     {{-- <a href="{{route('dashboard')}}" class="logo logo-dark">
