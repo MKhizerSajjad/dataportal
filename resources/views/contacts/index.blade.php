@@ -128,7 +128,7 @@
                                     <label class="form-label mb-0">Company</label>
 
                                     <p class="card-title-desc font-size-10 mb-0">
-                                        <code><b>Exclude companies</b></code>
+                                        <code class="text-primary"><b>Exclude companies</b></code>
                                     </p>
                                     <select name="exclude_company[]" id="exclude_company" data-filter="exclude_company" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
                                         {{-- @foreach (getCompanies() as $company)
@@ -224,7 +224,7 @@
                                 </div>
 
                                 <div class="mb-0">
-                                    <label for="name" class="mb-0">Annual Revenue</label>
+                                    <label for="name" class="mb-0">Annual Revenue ($)</label>
                                     <div class="btn-group btn-group-example mb-3" role="group" bis_skin_checked="1">
                                         <input type="text" name="from_revenue" id="from_revenue" input-filter="from_revenue" class="input form-control number-input" value="{{ request()->input('from_revenue') }}">
                                         <span class="bg bg-primary text-light p-2">To</span>
@@ -233,7 +233,7 @@
                                 </div>
 
                                 <div class="mb-0">
-                                    <label for="name" class="mb-0">Total Funding</label>
+                                    <label for="name" class="mb-0">Total Funding ($)</label>
                                     <div class="btn-group btn-group-example mb-3" role="group" bis_skin_checked="1">
                                         <input type="text" name="from_funding" id="from_funding" input-filter="from_funding" class="input form-control number-input" value="{{ request()->input('from_funding') }}">
                                         <span class="bg bg-primary text-light p-2">To</span>
@@ -244,7 +244,7 @@
 
 
                                 <div class="mb-3">
-                                    <label class="form-label mb-0">Funding Catory</label>
+                                    <label class="form-label mb-0">Funding Category</label>
                                     <select name="funding-cats[]" id="funding-cats" data-filter="funding-cats" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
                                     </select>
                                 </div>
