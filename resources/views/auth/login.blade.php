@@ -24,7 +24,7 @@
                             <a href="/" class="auth-logo-light">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="{{ asset('images/kn.png') }}" alt="" class="rounded-circle" height="34">
+                                        <img src="{{ asset('images/users/avatar-1.jpg') }}" alt="" class="rounded-circle" height="34">
                                     </span>
                                 </div>
                             </a>
@@ -32,7 +32,7 @@
                             <a href="/" class="auth-logo-dark">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="{{ asset('images/kn.png') }}" alt="" class="rounded-circle" height="34">
+                                        <img src="{{ asset('images/users/avatar-1.jpg') }}" alt="" class="rounded-circle" height="34">
                                     </span>
                                 </div>
                             </a>
