@@ -10,7 +10,7 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="text-primary p-4">
-                                    <h5 class="text-primary">Welcome Back !</h5>
+                                    <h5 class="text-primary">Welcome the AccSeller8 LeadVault!</h5>
                                     <p>Sign in to continue.</p>
                                 </div>
                             </div>
@@ -21,7 +21,7 @@
                     </div>
                     <div class="card-body pt-0">
                         <div class="auth-logo">
-                            <a href="/" class="auth-logo-light">
+                            <a href="{{ route('index') }}" class="auth-logo-light">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
                                         <img src="{{ asset('images/users/avatar-1.jpg') }}" alt="" class="rounded-circle" height="34">
@@ -29,7 +29,7 @@
                                 </div>
                             </a>
 
-                            <a href="/" class="auth-logo-dark">
+                            <a href="{{ route('index') }}" class="auth-logo-dark">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
                                         <img src="{{ asset('images/users/avatar-1.jpg') }}" alt="" class="rounded-circle" height="34">
