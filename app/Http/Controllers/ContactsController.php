@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use ZipArchive;
+use App\Notifications\ExportCompleted;
 use Carbon\Carbon;
 use App\Models\Contacts;
 use Illuminate\Http\Request;
@@ -10,7 +11,10 @@ use App\Exports\ContactsExport;
 use App\Imports\ContactsImport;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\ProcessContactsImport;
+use App\Jobs\ExtractContactsJob;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\TextUI\XmlConfiguration\Logging\Logging;
 
@@ -650,7 +654,7 @@ $totalData = $totalFiltered;
     {
 
         try {
-            logger("in");
+            // logger("in");
             $userID = 'user-'.Auth()->id();
             $filters = $request->all()['filter'];
             $chunkSize = 1000;
@@ -659,7 +663,7 @@ $totalData = $totalFiltered;
             $files[] = '';
             $contacts = new ContactsExport($filters, $offset, $limit);
             $contactsForChunk = clone $contacts;
-            logger('filters only : ' . json_encode($filters));
+            // logger('filters only : ' . json_encode($filters));
 
             $data = $contacts->collection($filters, $offset, $limit);
 
@@ -667,10 +671,10 @@ $totalData = $totalFiltered;
             $totalContacts = count($data);
             // $totalContacts = 2000;
 
-            logger("Total Counts" . $totalContacts);
+            // logger("Total Counts" . $totalContacts);
             $numChunks = ceil($totalContacts / $chunkSize); // Calculate number of chunks
 
-            logger("Chunks : " .$numChunks);
+            // logger("Chunks : " .$numChunks);
 
             $filePaths = [];
 
@@ -728,12 +732,32 @@ $totalData = $totalFiltered;
 
         } catch (\Exception $e) {
             // Log the error
-            \Log::error('Error storing Excel file: ' . $e->getMessage());
+            Log::error('Error storing Excel file: ' . $e->getMessage());
             // Return an error response
             return redirect()->route('contacts.index')->with('Oops!','We got some error.');
             // return response()->json(['error' => 'Error storing Excel file'], 500);
         }
 
+    }
+
+    public function export2(Request $request)
+    {
+        try {
+            logger('start');
+            // $user = Auth::user();
+            // $user->notify(new ExportCompleted("storage/exports/user-1/downloads.zip"));
+            $filters = $request->all()['filter'];
+            // logger("Filters : " . $filters);
+            logger('goingin');
+            dispatch(new ExtractContactsJob($filters, Auth::id()));
+            // ExportContactsJob::dispatch($filters, Auth::id());
+            return redirect()->route('contacts.index')->with('Your export is being processed. You will be notified once it is ready.');
+            // return response()->json(['message' => 'Your export is being processed. You will be notified once it is ready.']);
+        } catch (\Exception $e) {
+            Log::error('Error initiating export: ' . $e->getMessage());
+            return redirect()->route('contacts.index')->with('Oops!','We got some error.');
+            // return response()->json(['error' => 'An error occurred.'], 500);
+        }
     }
 
     /**
