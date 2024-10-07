@@ -521,7 +521,7 @@
 
         $(document).on('click','#export-data',function(e) {
 
-            alert('Your data is being exported. Please wait.');
+            alert('Your export is being processed. You will be notified via EMAIL once it is ready.');
 
             selectedFilters = {};
 
