@@ -743,12 +743,7 @@ $totalData = $totalFiltered;
     public function export2(Request $request)
     {
         try {
-            logger('start');
-            // $user = Auth::user();
-            // $user->notify(new ExportCompleted("storage/exports/user-1/downloads.zip"));
             $filters = $request->all()['filter'];
-            // logger("Filters : " . $filters);
-            logger('goingin');
             dispatch(new ExtractContactsJob($filters, Auth::id()));
             // ExportContactsJob::dispatch($filters, Auth::id());
             return redirect()->route('contacts.index')->with('Your export is being processed. You will be notified once it is ready.');
