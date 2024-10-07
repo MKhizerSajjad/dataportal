@@ -76,6 +76,6 @@ class ExtractContactsJob implements ShouldQueue
         $user = User::find($this->userID);
         logger("storage/exports/{$this->userID}/downloads.zip");
 
-        $user->notify(new ExportCompleted("https://leadvault.accseller8.com/storage/exports/{$this->userID}/downloads.zip"));
+        $user->notify(new ExportCompleted("storage/exports/{$this->userID}/downloads.zip"));
     }
 }
