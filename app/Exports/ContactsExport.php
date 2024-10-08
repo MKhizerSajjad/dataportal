@@ -636,11 +636,21 @@ class ContactsExport implements FromCollection, WithHeadings
                     case 'industry':
                         $contacts->where(function($query) use ($filter) {
                             foreach ((array) $filter as $value) {
+                                $query->where('industry', 'LIKE', $value);
+                            }
+                        });
+                        break;
+
+                    case 'industry22':
+                        $contacts->where(function($query) use ($filter) {
+                            foreach ((array) $filter as $value) {
                                 $words = explode(' ', $value);
                                 // Build the query to find industry containing all words
                                 foreach ($words as $word) {
                                     // Ensure each word is present in the industry
-                                    $query->orWhere('industry', 'LIKE', '%' . $word . '%');
+                                    if (trim($word) !== '&') {
+                                        $query->orWhere('industry', 'LIKE', '%' . trim($word) . '%');
+                                }
                                 }
                             }
                         });
