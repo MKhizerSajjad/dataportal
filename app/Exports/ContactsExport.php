@@ -26,9 +26,11 @@ class ContactsExport implements FromCollection, WithHeadings
     public function collection()
     {
         $contacts = Contacts::query();
+        logger('In Export');
         logger("COUNT ALL : " . $contacts->count());
         // logger("Filterss ALL : " . json_encode($this->filters));
         if(isset($this->filters)) {
+            logger($this->filters );
             foreach ($this->filters as $key => $filter) {
                 if ($filter === null || $filter === '') {
                     continue; // Skip empty filters
@@ -113,23 +115,23 @@ class ContactsExport implements FromCollection, WithHeadings
                             //         }
                             //     });
                             break;
-                        case 'technologies':
-                            // $contacts->where(function($query) use ($filter) {
-                            //     foreach ((array) $filter as $value) {
-                            //         $query->orWhereIn('technologies', [$value]);
-                            //     }
-                            // });
-                            // break;
-                        // case 'technologies':
+                        case 'seniority':
                             $contacts->where(function($query) use ($filter) {
                                 foreach ((array) $filter as $value) {
-                                    $words = explode(' ', $value);
-                                    foreach ($words as $word) {
-                                        $query->Where('technologies', 'LIKE', '%' . $word . '%');
-                                    }
+                                    $query->where('seniority', 'LIKE', $value);
                                 }
                             });
                             break;
+                            // case 'seniority':
+                            //     $contacts->where(function($query) use ($filter) {
+                            //         foreach ((array) $filter as $value) {
+                            //             $words = explode(' ', $value);
+                            //             foreach ($words as $word) {
+                            //                 $query->orWhere('seniority', 'LIKE', '%' . $word . '%');
+                            //             }
+                            //         }
+                            //     });
+                            //     break;
 
                     case 'department':
                         $contacts->where(function($query) use ($filter) {
@@ -200,6 +202,13 @@ class ContactsExport implements FromCollection, WithHeadings
                         break;
 
                     case 'industry':
+                        $contacts->where(function($query) use ($filter) {
+                            foreach ((array) $filter as $value) {
+                                $query->where('industry', 'LIKE', $value);
+                            }
+                        });
+                        break;
+                    case 'industry22':
                         $contacts->where(function($query) use ($filter) {
                             foreach ((array) $filter as $value) {
                                 $words = explode(' ', $value);
@@ -302,7 +311,8 @@ class ContactsExport implements FromCollection, WithHeadings
         } else {
             logger('offset');
             logger($this->offset .'------'.$this->limit);
-            return $contacts->offset($this->offset)->limit($this->limit)
+            // ->offset($this->offset)->limit($this->limit)
+            return $contacts
                     ->select('first_name', 'last_name', 'title', 'company', 'company_name_for_emails', 'email', 'email_status', 'seniority', 'departments',
                     'first_phone', 'work_direct_phone', 'home_phone', 'mobile_phone', 'corporate_phone', 'other_phone', 'employees', 'industry', 'keywords', 'person_linkedin',
                     'website', 'company_linkedin_url', 'facebook_url', 'twitter_url', 'city', 'state', 'country', 'company_address', 'company_city', 'company_state', 'company_country',
@@ -452,6 +462,7 @@ class ContactsExport implements FromCollection, WithHeadings
     public function queryCount()
     {
         // Apply filters (if needed)
+        logger($this->filters);
         if (!empty($this->filters)) {
 
             logger ('in queryCount');
@@ -464,6 +475,7 @@ class ContactsExport implements FromCollection, WithHeadings
             $fromFunding = 0;
             $toFunding = 10000000000;
             foreach ($this->filters as $key => $filter) {
+                logger( $key .'----'. $filter);
                 if ($filter === null || $filter === '') {
                     continue; // Skip empty filters
                 }
