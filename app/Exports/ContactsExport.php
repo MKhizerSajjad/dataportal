@@ -311,12 +311,13 @@ class ContactsExport implements FromCollection, WithHeadings
         } else {
             logger('offset');
             logger($this->offset .'------'.$this->limit);
-            // ->offset($this->offset)->limit($this->limit)
-            return $contacts
+            return $contacts->offset($this->offset)->limit($this->limit)
                     ->select('first_name', 'last_name', 'title', 'company', 'company_name_for_emails', 'email', 'email_status', 'seniority', 'departments',
                     'first_phone', 'work_direct_phone', 'home_phone', 'mobile_phone', 'corporate_phone', 'other_phone', 'employees', 'industry', 'keywords', 'person_linkedin',
                     'website', 'company_linkedin_url', 'facebook_url', 'twitter_url', 'city', 'state', 'country', 'company_address', 'company_city', 'company_state', 'company_country',
                     'company_phone', 'seo_description', 'technologies', 'annual_revenue', 'total_funding', 'latest_funding', 'latest_funding_amount', 'id')
+                    ->orderBy('first_name', 'asc')
+                    ->orderBy('last_name', 'asc')
                     ->get();
         }
 
@@ -461,21 +462,306 @@ class ContactsExport implements FromCollection, WithHeadings
 
     public function queryCount()
     {
-        // Apply filters (if needed)
-        logger($this->filters);
-        if (!empty($this->filters)) {
+        // logger($this->filters);
 
-            logger ('in queryCount');
+        // PREVIOUS FILTERS
+        // Apply filters (if needed)
+        // if (!empty($this->filters)) {
+
+        //     logger ('in queryCount');
+        //     $contacts = Contacts::query();
+
+        //     $fromEmployees = 0;
+        //     $toEmployees = 1000000;
+        //     $fromRevenue = 0;
+        //     $toRevenue = 10000000000;
+        //     $fromFunding = 0;
+        //     $toFunding = 10000000000;
+        //     foreach ($this->filters as $key => $filter) {
+        //         logger( $key .'----'. $filter);
+        //         if ($filter === null || $filter === '') {
+        //             continue; // Skip empty filters
+        //         }
+
+        //         switch ($key) {
+        //             case 'first_name':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     $query->where('first_name', 'LIKE', '%' . $filter . '%');
+        //                 });
+        //                 break;
+        //             case 'last_name':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     $query->Where('last_name', 'LIKE', '%' . $filter . '%');
+        //                 });
+        //                 break;
+
+        //                 case 'title':
+        //                     // $contacts->where(function($query) use ($filter) {
+        //                     //     foreach ((array) $filter as $value) {
+        //                     //         $words = explode(' ', $value);
+        //                     //         // Build the query to find titles containing all words
+        //                     //         foreach ($words as $word) {
+        //                     //             // Ensure each word is present in the title
+        //                     //             $query->where('title', 'LIKE', '%' . $word . '%');
+        //                     //         }
+        //                     //     }
+        //                     // });
+        //                     // break;
+        //                     $contacts->where(function($query) use ($filter) {
+        //                         $titleMappings = [
+        //                             'CEO' => ['CEO', 'Chief Executive Officer'],
+        //                             'CSO' => ['CSO', 'Chief Sales Officer'],
+        //                             'CRO' => ['CRO', 'Chief Revenue Officer'],
+        //                             'CCO' => ['CCO', 'Chief Commercial Officer'],
+        //                             'Chief Operating Officer' => ['Chief Operating Officer', 'COO'],
+        //                             'Managing Director' => ['Managing Director', 'MD'],
+        //                             'VP Sales' => ['VP Sales', 'Vice President Sales'],
+        //                             'Chief Marketing Officer' => ['Chief Marketing Officer', 'CMO'],
+        //                             'CIO' => ['CIO', 'Chief Information Officer'],
+        //                             'Chief Technology Officer' => ['Chief Technology Officer', 'CTO']
+        //                         ];
+
+        //                         foreach ((array) $filter as $value) {
+        //                             // Check if the word exists in the mappings
+        //                             $matchedTitles = [];
+        //                             foreach ($titleMappings as $key => $synonyms) {
+        //                                 if (in_array($value, $synonyms)) {
+        //                                     $matchedTitles = $synonyms;
+        //                                 }
+        //                             }
+        //                             if (!empty($matchedTitles)) {
+        //                                 // Build OR condition for matched titles
+        //                                 // $orQueries[] = function ($q) use ($matchedTitles) {
+        //                                     foreach ($matchedTitles as $title) {
+        //                                         $query->orWhere('title', 'LIKE', '%' . $title . '%');
+        //                                         // logger('title : ' . $title);
+        //                                     }
+        //                                 // };
+        //                             }
+        //                             $words = explode(' ', $value);
+        //                             $normalized = '%' . implode('%', $words) . '%';
+        //                             // Build the OR condition for each possible permutation
+        //                             foreach ($words as $word) {
+        //                                 $query->where('title', 'LIKE', '%' . $word . '%');
+        //                             }
+        //                             // Allow different word order and additional strings
+        //                             $query->orWhere('title', 'LIKE', $normalized);
+        //                         }
+        //                     });
+        //                     // case 'title':
+        //                     //     $contacts->where(function($query) use ($filter) {
+        //                     //         foreach ((array) $filter as $value) {
+        //                     //             $words = explode(' ', $value);
+        //                     //             $normalized = '%' . implode('%', $words) . '%';
+        //                     //             // Build the OR condition for each possible permutation
+        //                     //             foreach ($words as $word) {
+        //                     //                 $query->orWhere('title', 'LIKE', '%' . $word . '%');
+        //                     //             }
+        //                     //             // Allow different word order and additional strings
+        //                     //             $query->orWhere('title', 'LIKE', $normalized);
+        //                     //         }
+        //                     //     });
+        //                     break;
+        //             case 'seniority':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->where('seniority', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+        //             // case 'seniority':
+        //             //     $contacts->where(function($query) use ($filter) {
+        //             //         foreach ((array) $filter as $value) {
+        //             //             $words = explode(' ', $value);
+        //             //             foreach ($words as $word) {
+        //             //                 $query->orWhere('seniority', 'LIKE', '%' . $word . '%');
+        //             //             }
+        //             //         }
+        //             //     });
+        //             //     break;
+
+        //             case 'department':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->Where('departments', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+
+        //             case 'company':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->orWhere('company', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+        //             // case 'company':
+        //             //     $contacts->where(function($query) use ($filter) {
+        //             //         foreach ((array) $filter as $value) {
+        //             //             $words = explode(' ', $value);
+        //             //             foreach ($words as $word) {
+        //             //                 $query->orWhere('company', 'LIKE', '%' . $word . '%');
+        //             //             }
+        //             //         }
+        //             //     });
+        //             //     break;
+        //             case 'company_city':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->orWhere('company_city', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+        //             case 'company_state':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->orWhere('company_state', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+        //             case 'company_country':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->orWhere('company_country', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+        //             case 'city':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->orWhere('city', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+        //             case 'state':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->orWhere('state', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+        //             case 'country':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->orWhere('country', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+
+        //             case 'industry':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->where('industry', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+
+        //             case 'industry22':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $words = explode(' ', $value);
+        //                         // Build the query to find industry containing all words
+        //                         foreach ($words as $word) {
+        //                             // Ensure each word is present in the industry
+        //                             if (trim($word) !== '&') {
+        //                                 $query->orWhere('industry', 'LIKE', '%' . trim($word) . '%');
+        //                         }
+        //                         }
+        //                     }
+        //                 });
+        //                 break;
+        //             // case 'industry':
+        //             //     $contacts->where(function($query) use ($filter) {
+        //             //         foreach ((array) $filter as $value) {
+        //             //             $words = explode(' ', $value);
+        //             //             foreach ($words as $word) {
+        //             //                 $query->orWhere('industry', 'LIKE', '%' . $word . '%');
+        //             //             }
+        //             //         }
+        //             //     });
+        //             //     break;
+        //             case 'email_status':
+        //                 $contacts->whereIn($key, (array) $filter);
+        //                 break;
+        //             case 'exclude_company':
+        //                 $contacts->whereNotIn('company', (array) $filter);
+        //                 break;
+        //             case 'from_employees':
+        //                 $fromEmployees = $this->removeFormatt($filter);
+        //                 break;
+        //             case 'to_employees':
+        //                 $toEmployees = $this->removeFormatt($filter);
+        //                 break;
+        //             case 'from_revenue':
+        //                 $fromRevenue = $this->removeFormatt($filter);
+        //                 break;
+        //             case 'to_revenue':
+        //                 $toRevenue = $this->removeFormatt($filter);
+        //                 break;
+        //             case 'from_funding':
+        //                 $fromFunding = $this->removeFormatt($filter);
+        //                 break;
+        //             case 'to_funding':
+        //                 $toFunding = $this->removeFormatt($filter);
+        //                 break;
+        //             case 'keywords':
+        //                 $keywords = explode(',', $filter);
+        //                 $contacts->where(function($query) use ($keywords) {
+        //                     foreach ($keywords as $value) {
+        //                         $query->orWhere('keywords', 'LIKE', '%' . $value . '%');
+        //                     }
+        //                 });
+        //                 break;
+
+        //             case 'funding-cats':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $query->orWhere('latest_funding', 'LIKE', $value);
+        //                     }
+        //                 });
+        //                 break;
+
+        //             case 'technologies':
+        //                 // $contacts->where(function($query) use ($filter) {
+        //                 //     foreach ((array) $filter as $value) {
+        //                 //         $query->orWhereIn('technologies', [$value]);
+        //                 //     }
+        //                 // });
+        //                 // break;
+        //             // case 'technologies':
+        //                 $contacts->where(function($query) use ($filter) {
+        //                     foreach ((array) $filter as $value) {
+        //                         $words = explode(' ', $value);
+        //                         foreach ($words as $word) {
+        //                             $query->Where('technologies', 'LIKE', '%' . $word . '%');
+        //                         }
+        //                     }
+        //                 });
+        //                 break;
+        //         }
+        //     }
+
+        //     // Additional where clauses for range filters
+        //     if(isset($fromEmployees) || isset($toEmployees)) {
+        //         $contacts->whereBetween('employees', [$fromEmployees ?? 0, $toEmployees ?? 1000000]);
+        //     }
+
+        //     if(isset($fromRevenue) || isset($toRevenue)) {
+        //         $contacts->whereBetween('annual_revenue', [$fromRevenue ?? 0, $toRevenue ?? 10000000000]);
+        //     }
+
+        //     if(isset($fromFunding) || isset($toFunding)) {
+        //         $contacts->whereBetween('total_funding', [$fromFunding ?? 0, $toFunding ?? 10000000000]);
+        //     }
+        //     logger ('in queryCount END : COUNT : ' . $contacts->count());
+        //     return $contacts->count();
+        // }
+
+        $filters = $this->filters;
+        if ($filters) {
             $contacts = Contacts::query();
 
-            $fromEmployees = 0;
-            $toEmployees = 1000000;
-            $fromRevenue = 0;
-            $toRevenue = 10000000000;
-            $fromFunding = 0;
-            $toFunding = 10000000000;
-            foreach ($this->filters as $key => $filter) {
-                logger( $key .'----'. $filter);
+            foreach ($filters as $key => $filter) {
                 if ($filter === null || $filter === '') {
                     continue; // Skip empty filters
                 }
@@ -750,9 +1036,11 @@ class ContactsExport implements FromCollection, WithHeadings
             if(isset($fromFunding) || isset($toFunding)) {
                 $contacts->whereBetween('total_funding', [$fromFunding ?? 0, $toFunding ?? 10000000000]);
             }
-            logger ('in queryCount END : COUNT : ' . $contacts->count());
+
+            logger('After filters count : '. $contacts->count());
             return $contacts->count();
         }
+
 
     }
 
