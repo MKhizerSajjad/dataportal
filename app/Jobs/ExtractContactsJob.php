@@ -51,13 +51,17 @@ class ExtractContactsJob implements ShouldQueue
         for ($i = 0; $i < $numChunks; $i++) {
             $fileName = "contacts-" . now()->timestamp . "-" . ($i + 1) . ".csv";
             $filePath = "exports/{$this->userID}/$fileName";
-
+            if (!is_dir($path)) {
+                mkdir($path, 0777, true);
+            }
             $chunkedContacts = new ContactsExport($this->filters, $i * $chunkSize, $chunkSize);
             Excel::store($chunkedContacts, $filePath);
             $filePaths[] = "storage/$filePath";
+            logger('End with CSV : '. $i);
         }
 
         // Create a ZIP file
+        logger('Just before ZIP making');
         $zipFileName = "downloads.zip";
         $zipFilePath = storage_path("app/public/exports/{$this->userID}/$zipFileName");
         $zip = new ZipArchive;
@@ -67,6 +71,7 @@ class ExtractContactsJob implements ShouldQueue
                 $zip->addFile(public_path($file), basename($file));
             }
             $zip->close();
+            logger('Just after ZIP making');
         }
 
         // Optionally, you can notify the user via a notification or email that the export is done
